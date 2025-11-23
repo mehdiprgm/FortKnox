@@ -1,12 +1,11 @@
 package org.zen.fortknox.viewmodel
 
 import androidx.lifecycle.ViewModel
-import org.zen.fortknox.api.base.response.ApiResponse
 import org.zen.fortknox.api.entity.ApiEmail
 import org.zen.fortknox.api.entity.ApiUser
 import org.zen.fortknox.api.respository.ApiEmailRepository
 import org.zen.fortknox.api.respository.ApiUserRepository
-import org.zendev.keepergen.api.base.RetrofitClient
+import org.zen.fortknox.api.base.RetrofitClient
 
 class ApiViewModel : ViewModel() {
     private var apiUserRepository: ApiUserRepository = ApiUserRepository(RetrofitClient.userService)
