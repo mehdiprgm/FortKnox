@@ -8,7 +8,7 @@ About
 This new application is built upon the foundation of the original keepergen code base, but it has comprehensively addressed and resolved security vulnerabilities and user interface inconsistencies found in the predecessor. The software functions as a personal data vault, designed to securely store all your personal and sensitive information.
 
 
-## Features
+## ⚡️ Features
 
 The software provides structured categories for data management, along with essential tools for interaction:
 
@@ -32,11 +32,11 @@ Data Sharing: Capability to securely share information with other applications (
 
 High-Speed Search: Built-in search functionality allowing users to quickly and efficiently locate any piece of stored information.
 
-## Installation
+## ⚙️ Installation
 
 Create new Android Studio project and copy app folder content into the project files.
     
-## FAQ
+## ❓ FAQ
 
 #### How to run project?
 
@@ -69,12 +69,12 @@ IT Skills
 i am trying to work in DevOps
 
 
-## Authors
+## ✍️ Authors
 
 - [@Mehdi Lavasani](https://github.com/mehdiprgm)
 
 
-## Screenshots
+## 🖼️ Screenshots
 
 ![](docs/screenshots/1.jpg)
 
@@ -83,7 +83,7 @@ i am trying to work in DevOps
 ![](docs/screenshots/3.jpg)
 
 
-## Tech Stack
+## 😈 Tech Stack
 
 **Client:** Kotlin, Xml, ORM
 
