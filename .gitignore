@@ -49,4 +49,4 @@
 /.idea
 
 <!-- My main retofit file to connect to my api -->
-<!-- /app/src/main/java/org/zen/fortknox/api/base/RetrofitClient.kt -->
+/app/src/main/java/org/zen/fortknox/api/base/RetrofitClient.kt
