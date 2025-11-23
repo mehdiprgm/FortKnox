@@ -4,7 +4,6 @@
 
 # FortKnox
 
-About
 This new application is built upon the foundation of the original keepergen code base, but it has comprehensively addressed and resolved security vulnerabilities and user interface inconsistencies found in the predecessor. The software functions as a personal data vault, designed to securely store all your personal and sensitive information.
 
 
