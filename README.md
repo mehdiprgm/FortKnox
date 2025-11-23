@@ -5,27 +5,6 @@ About
 This new application is built upon the foundation of the original keepergen code base, but it has comprehensively addressed and resolved security vulnerabilities and user interface inconsistencies found in the predecessor. The software functions as a personal data vault, designed to securely store all your personal and sensitive information.
 
 
-## Authors
-
-- [@Mehdi Lavasani](https://github.com/mehdiprgm)
-
-
-## FAQ
-
-#### How to run project?
-
-open Android Studio and select files.
-i removed some files to make repository lighter.
-
-those files were project essential files, so this is not usable.
-what you can do is to copy all files from app folder into your project and build to run it.
-
-#### Is APK file secure?
-
-no the apk file was built in debug mode.
-if you want secure and usable you have to generate signed apk in your project.
-
-
 ## Features
 
 The software provides structured categories for data management, along with essential tools for interaction:
@@ -50,6 +29,26 @@ Data Sharing: Capability to securely share information with other applications (
 
 High-Speed Search: Built-in search functionality allowing users to quickly and efficiently locate any piece of stored information.
 
+## Installation
+
+Create new Android Studio project and copy app folder content into the project files.
+    
+## FAQ
+
+#### How to run project?
+
+open Android Studio and select files.
+i removed some files to make repository lighter.
+
+those files were project essential files, so this is not usable.
+what you can do is to copy all files from app folder into your project and build to run it.
+
+#### Is APK file secure?
+
+no the apk file was built in debug mode.
+if you want secure and usable you have to generate signed apk in your project.
+
+
 ## 🛠 Skills
 
 Programming
@@ -67,10 +66,11 @@ IT Skills
 i am trying to work in DevOps
 
 
-## Installation
+## Authors
 
-Create new Android Studio project and copy app folder content into the project files.
-    
+- [@Mehdi Lavasani](https://github.com/mehdiprgm)
+
+
 ![Logo](docs/channelLogo.PNG)
 
 
