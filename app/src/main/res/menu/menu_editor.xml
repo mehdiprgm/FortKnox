@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/menuSelectAll"
+        android:title="Select all"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/menuRename"
+        android:title="Rename"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/menuSave"
+        android:title="Save"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/menuPaste"
+        android:title="Paste"
+        tools:ignore="HardcodedText" />
+</menu>

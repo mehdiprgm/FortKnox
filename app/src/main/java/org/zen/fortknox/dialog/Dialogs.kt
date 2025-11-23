@@ -1,0 +1,331 @@
+package org.zen.fortknox.dialog
+
+import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
+import android.text.InputType
+import android.text.method.PasswordTransformationMethod
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
+import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import org.zen.fortknox.R
+import org.zen.fortknox.tools.startDialogAnimation
+import kotlin.coroutines.resume
+
+class Dialogs {
+    companion object {
+
+        @JvmStatic
+        private fun createDialog(
+            context: Context, layoutFile: Int, cancelable: Boolean = false
+        ): Dialog {
+            val dialog = Dialog(context)
+            dialog.setContentView(layoutFile)
+
+            dialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            )
+
+            dialog.window?.setBackgroundDrawable(
+                AppCompatResources.getDrawable(
+                    context, R.drawable.dialog_background
+                )
+            )
+
+            dialog.setCancelable(cancelable)
+            return dialog
+        }
+
+        @JvmStatic
+        suspend fun ask(
+            context: Context,
+            icon: Int,
+            title: String,
+            message: String,
+            yesText: String = "Yes",
+            noText: String = "No",
+            cancellable: Boolean = false
+        ): Boolean = suspendCancellableCoroutine { continuation ->
+            val dialog = createDialog(
+                context, R.layout.dialog_ask, cancellable
+            )
+
+            startDialogAnimation(dialog.findViewById(R.id.main))
+
+            val tvTitle = dialog.findViewById<TextView>(R.id.tvTitle)
+            val tvMessage = dialog.findViewById<TextView>(R.id.tvMessage)
+
+            val btnYes = dialog.findViewById<MaterialButton>(R.id.btnYes)
+            val btnNo = dialog.findViewById<MaterialButton>(R.id.btnNo)
+
+            btnYes.text = yesText
+            btnNo.text = noText
+
+            tvTitle.text = title
+            tvMessage.text = message
+
+            dialog.findViewById<ImageView>(R.id.imgIcon).setImageDrawable(
+                ContextCompat.getDrawable(context, icon)
+            )
+
+            btnYes.setOnClickListener {
+                continuation.resume(true)
+                dialog.dismiss()
+            }
+
+            btnNo.setOnClickListener {
+                continuation.resume(false)
+                dialog.dismiss()
+            }
+
+            dialog.setOnCancelListener {
+                continuation.resume(false)
+            }
+
+            continuation.invokeOnCancellation {
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        }
+
+        @JvmStatic
+        suspend fun textInput(
+            context: Context,
+            title: String,
+            message: String,
+            hint: String,
+            defaultText: String = "",
+            isPassword: Boolean = false,
+            isNumber: Boolean = false,
+            cancellable: Boolean = false
+        ): String = suspendCancellableCoroutine { continuation ->
+            val dialog = createDialog(
+                context,
+                R.layout.dialog_text_input
+            )
+            dialog.setCancelable(cancellable)
+            startDialogAnimation(dialog.findViewById(R.id.main))
+
+            val txtInput = dialog.findViewById<EditText>(R.id.txtInput)
+
+            dialog.findViewById<TextView>(R.id.tvTitle).text = title
+            dialog.findViewById<TextView>(R.id.tvMessage).text = message
+
+            txtInput.hint = hint
+            txtInput.setText(defaultText)
+
+            if (isPassword) {
+                if (isNumber) {
+                    txtInput.inputType =
+                        InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+                } else {
+                    txtInput.inputType =
+                        InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                }
+                txtInput.transformationMethod = PasswordTransformationMethod.getInstance()
+            } else {
+                if (isNumber) {
+                    txtInput.inputType = InputType.TYPE_CLASS_NUMBER
+                } else {
+                    txtInput.inputType = InputType.TYPE_CLASS_TEXT
+                }
+            }
+
+            dialog.findViewById<Button>(R.id.btnOk).setOnClickListener {
+                val text = txtInput.text.toString()
+                continuation.resume(text)
+                dialog.dismiss()
+            }
+
+            dialog.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+                continuation.resume("")
+                dialog.dismiss()
+            }
+
+            dialog.setOnCancelListener {
+                continuation.resume("")
+            }
+
+            continuation.invokeOnCancellation {
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        }
+
+        @JvmStatic
+        suspend fun showMessage(
+            context: Context,
+            title: String,
+            message: String,
+            dialogType: DialogType
+        ): Unit = suspendCancellableCoroutine { continuation ->
+            val dialog = createDialog(context, R.layout.dialog_show_messsage)
+            startDialogAnimation(dialog.findViewById(R.id.main))
+
+            val imgIcon = dialog.findViewById<ImageView>(R.id.imgIcon)
+
+            val tvTitle = dialog.findViewById<TextView>(R.id.tvTitle)
+            val tvMessage = dialog.findViewById<TextView>(R.id.tvMessage)
+
+            tvTitle.text = title
+            tvMessage.text = message
+
+            when (dialogType) {
+                DialogType.Error -> {
+                    imgIcon.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context, R.drawable.ic_error
+                        )
+                    )
+                }
+
+                DialogType.Warning -> {
+                    imgIcon.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context, R.drawable.ic_warning
+                        )
+                    )
+                }
+
+                DialogType.Information -> {
+                    imgIcon.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_info
+                        )
+                    )
+                }
+            }
+
+            dialog.findViewById<MaterialButton>(R.id.btnOk).setOnClickListener {
+                continuation.resume(Unit)
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        }
+
+        @JvmStatic
+        suspend fun showException(context: Context, exception: Exception): Unit =
+            withContext(Dispatchers.Main) {
+                val message = "${exception.message}\n${exception.stackTraceToString()}"
+                showMessage(context, "Error", message, DialogType.Error)
+            }
+
+        @JvmStatic
+        suspend fun showNoInternetConnection(context: Context): Unit =
+            withContext(Dispatchers.Main) {
+                showMessage(
+                    context,
+                    "No connection",
+                    "Device is not connected to the internet.\nUse wifi or mobile data and try again",
+                    DialogType.Error
+                )
+            }
+
+        @JvmStatic
+        fun load(context: Context, title: String, message: String): Dialog {
+            val dialog = createDialog(context, R.layout.dialog_load, false)
+            startDialogAnimation(dialog.findViewById(R.id.main))
+
+            dialog.findViewById<TextView>(R.id.tvTitle).text = title
+            dialog.findViewById<TextView>(R.id.tvMessage).text = message
+
+            return dialog
+        }
+
+        @SuppressLint("SetTextI18n")
+        @JvmStatic
+        suspend fun showNewProfileCreated(context: Context, username: String): Unit =
+            suspendCancellableCoroutine { continuation ->
+                val dialog = createDialog(context, R.layout.dialog_show_new_profile_created, false)
+
+                val tvDescription = dialog.findViewById<TextView>(R.id.tvDescription)
+                val btnOk = dialog.findViewById<MaterialButton>(R.id.btnOk)
+
+                tvDescription.text = """
+                    Welcome to FortKnox, $username
+                    You can now use application to save your information in vault
+                """.trimIndent()
+
+                btnOk.setOnClickListener {
+                    continuation.resume(Unit)
+                    dialog.dismiss()
+                }
+
+                dialog.show()
+            }
+
+        @JvmStatic
+        suspend fun selectAccountType(context: Context, defaultValue: String): String? =
+            suspendCancellableCoroutine { continuation ->
+                val dialog = createDialog(context, R.layout.dialog_select_account_type, true)
+                startDialogAnimation(dialog.findViewById(R.id.main))
+
+                var accountType: String? = null
+
+                val btnOk = dialog.findViewById<MaterialButton>(R.id.btnOk)
+                val buttons = listOf<RadioButton>(
+                    dialog.findViewById(R.id.btnSocialMedia),
+                    dialog.findViewById(R.id.btnWebsite),
+                    dialog.findViewById(R.id.btnEmailAddress),
+                    dialog.findViewById(R.id.btnOthers)
+                )
+
+                /* Write same click listener for all buttons */
+                val clickListener = View.OnClickListener { view ->
+                    when (view.id) {
+                        R.id.btnSocialMedia,
+                        R.id.btnWebsite,
+                        R.id.btnEmailAddress,
+                        R.id.btnOthers -> {
+                            accountType = (view as RadioButton).text.toString()
+                        }
+                    }
+                }
+
+                when(defaultValue) {
+                    "Social Media" -> {
+                        buttons[0].isChecked = true
+                    }
+
+                    "Website" -> {
+                        buttons[1].isChecked = true
+                    }
+
+                    "Email Address" -> {
+                        buttons[2].isChecked = true
+                    }
+
+                    "Others" -> {
+                        buttons[3].isChecked = true
+                    }
+                }
+
+                /* Apply click listener to all buttons */
+                buttons.forEach { button ->
+                    button.setOnClickListener(clickListener)
+                }
+
+                btnOk.setOnClickListener {
+                    continuation.resume(accountType)
+                    dialog.dismiss()
+                }
+
+                dialog.show()
+            }
+    }
+}

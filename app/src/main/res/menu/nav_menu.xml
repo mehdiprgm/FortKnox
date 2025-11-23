@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:title="Application"
+        tools:ignore="HardcodedText">
+        <menu>
+            <item
+                android:id="@+id/menuMyProfile"
+                android:icon="@drawable/ic_account"
+                android:title="My Profile"
+                tools:ignore="HardcodedText" />
+
+            <item
+                android:id="@+id/menuMonitor"
+                android:icon="@drawable/ic_chart"
+                android:title="Monitor"
+                tools:ignore="HardcodedText" />
+        </menu>
+    </item>
+
+    <item
+        android:title="Database"
+        tools:ignore="HardcodedText">
+        <menu>
+            <group
+                android:id="@+id/database_group"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menuAccounts"
+                    android:checkable="true"
+                    android:icon="@drawable/ic_internet"
+                    android:title="Accounts"
+                    tools:ignore="HardcodedText" />
+
+                <item
+                    android:id="@+id/menuBankCards"
+                    android:checkable="true"
+                    android:icon="@drawable/ic_credit_card"
+                    android:title="Bank Cards"
+                    tools:ignore="HardcodedText" />
+
+                <item
+                    android:id="@+id/menuContacts"
+                    android:checkable="true"
+                    android:icon="@drawable/ic_phone"
+                    android:title="Contacts"
+                    tools:ignore="HardcodedText" />
+
+                <item
+                    android:id="@+id/menuNotes"
+                    android:checkable="true"
+                    android:icon="@drawable/ic_note"
+                    android:title="Notes"
+                    tools:ignore="HardcodedText" />
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menuSettings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings"
+        tools:ignore="HardcodedText" />
+</menu>

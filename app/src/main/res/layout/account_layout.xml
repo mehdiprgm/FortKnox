@@ -1,0 +1,113 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardAccount"
+        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layAccount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/panelBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tvAccountName"
+                style="@style/TextNormal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/ic_account"
+                android:drawablePadding="15dp"
+                android:gravity="center_vertical"
+                android:text="Account name"
+                android:textDirection="ltr"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvUsernameTitle"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/transparent"
+                android:text="Username"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tvAccountName"
+                app:layout_constraintTop_toBottomOf="@+id/tvAccountName"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="mehdi.la.79"
+                android:textColor="@color/foreground_less"
+                android:textDirection="ltr"
+                app:layout_constraintStart_toStartOf="@+id/tvUsernameTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvUsernameTitle"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvAccountTypeTitle"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:text="Account type"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tvUsername"
+                app:layout_constraintTop_toBottomOf="@+id/tvUsername"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvAccountType"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="09032748106"
+                android:textColor="@color/foreground_less"
+                app:layout_constraintStart_toStartOf="@+id/tvAccountTypeTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvAccountTypeTitle"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/chkSelected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:enabled="false"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

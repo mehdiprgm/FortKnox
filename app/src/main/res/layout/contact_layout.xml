@@ -1,0 +1,109 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardContact"
+        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layContact"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/panelBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tvName"
+                style="@style/TextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/ic_iphone"
+                android:drawablePadding="15dp"
+                android:gravity="center_vertical"
+                android:text="Name"
+                android:textDirection="ltr"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvPhoneNumberTitle"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/transparent"
+                android:text="Phone number"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tvName"
+                app:layout_constraintTop_toBottomOf="@+id/tvName"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvPhoneNumber"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="0903 - 274 8106"
+                android:textColor="@color/foreground_less"
+                app:layout_constraintStart_toStartOf="@+id/tvPhoneNumberTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvPhoneNumberTitle"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvExtraInformationTitle"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:text="Extra information"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tvPhoneNumber"
+                app:layout_constraintTop_toBottomOf="@+id/tvPhoneNumber"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvExtraInformation"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="Extra information"
+                android:textColor="@color/foreground_less"
+                app:layout_constraintStart_toStartOf="@+id/tvExtraInformationTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvExtraInformationTitle"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/chkSelected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:enabled="false"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

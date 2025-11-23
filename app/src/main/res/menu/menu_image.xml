@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuCamera"
+        android:icon="@drawable/ic_camera"
+        android:title="Camera"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/menuGallery"
+        android:icon="@drawable/ic_picture"
+        android:title="Gallery"
+        tools:ignore="HardcodedText" />
+</menu>
