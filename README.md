@@ -1,4 +1,7 @@
 
+![Logo](docs/channel_logo.PNG)
+
+
 # FortKnox
 
 About
@@ -69,9 +72,6 @@ i am trying to work in DevOps
 ## Authors
 
 - [@Mehdi Lavasani](https://github.com/mehdiprgm)
-
-
-![Logo](docs/channelLogo.PNG)
 
 
 ## Screenshots
