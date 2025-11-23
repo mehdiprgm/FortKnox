@@ -1,0 +1,49 @@
+<!-- Module configuration file for Android Studio/IntelliJ IDEA -->
+*.iml
+
+<!-- Contains Gradle wrapper files and build caches for faster performance -->
+.gradle
+.gradle.rar
+/gradle
+
+<!-- Stores the local Android SDK path and machine-specific environment settings -->
+/local.properties
+
+<!-- Internal Android Studio cache files for IDE performance -->
+/.idea/caches
+
+<!-- Definitions of external libraries and project dependencies -->
+/.idea/libraries
+
+<!-- Lists all project modules and their corresponding .iml files -->
+/.idea/modules.xml
+
+<!-- Stores personal workspace settings like open windows and tool positions -->
+/.idea/workspace.xml
+
+<!-- Stores visual information for the Navigation Component editor -->
+/.idea/navEditor.xml
+
+<!-- Stores settings used by the Asset Studio tool for generating icons -->
+/.idea/assetWizardSettings.xml
+
+<!-- A macOS hidden file storing folder display properties -->
+.DS_Store
+
+<!-- The output directory for the build process, containing compiled files and the final APK -->
+/build
+
+<!-- Folder used to store output files from Android Profiler tools (e.g., memory and network traces) -->
+/captures
+
+<!-- Contains intermediate files for building native (C/C++) code with CMake or ndk-build -->
+.externalNativeBuild
+
+<!-- Temporary output folder related to native code builds -->
+.cxx
+
+<!-- My api source code -->
+/api
+
+<!-- Android studio dir -->
+/.idea
