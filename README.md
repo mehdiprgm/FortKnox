@@ -34,6 +34,50 @@ High-Speed Search: Built-in search functionality allowing users to quickly and e
 ## ⚙️ Installation
 
 Create new Android Studio project and copy app folder content into the project files.
+For security reasons i removed RetrofitClient.kt file.
+I can't allow anyone to access the server.
+
+For local development and testing the following is the configuration for the Retrofit client.
+
+Note: The IP address 10.0.2.2 is the special address that the Android Emulator uses to route traffic to the host computer's localhost interface.
+
+```kotlin
+package org.zen.fortknox.api.base
+
+import okhttp3.OkHttpClient
+import org.zen.fortknox.api.service.EmailService
+import org.zen.fortknox.api.service.UserService
+import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
+
+import retrofit2.converter.gson.GsonConverterFactory
+
+object RetrofitClient {
+    private const val BASE_URL = "http://10.0.2.2:5000/"
+
+    private val retrofit: Retrofit by lazy {
+        val client = OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
+
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+    }
+
+    val userService: UserService by lazy {
+        retrofit.create(UserService::class.java)
+    }
+
+    val emailService: EmailService by lazy {
+        retrofit.create(EmailService::class.java)
+    }
+}
+```
     
 ## ❓ FAQ
 
