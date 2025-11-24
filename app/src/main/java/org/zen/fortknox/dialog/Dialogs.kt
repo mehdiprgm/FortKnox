@@ -3,6 +3,7 @@ package org.zen.fortknox.dialog
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.view.View
@@ -14,6 +15,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -327,5 +329,68 @@ class Dialogs {
 
                 dialog.show()
             }
+
+        @JvmStatic
+        fun showAboutUs(context: Context) {
+            val dialog = createDialog(context, R.layout.dialog_about_us, false)
+            startDialogAnimation(dialog.findViewById(R.id.main))
+
+            val imgGmail = dialog.findViewById<ImageView>(R.id.imgGmail)
+            val imgTelegram = dialog.findViewById<ImageView>(R.id.imgTelegram)
+            val imgInstagram = dialog.findViewById<ImageView>(R.id.imgInstagram)
+            val imgGithub = dialog.findViewById<ImageView>(R.id.imgGithub)
+
+            imgGmail.setOnClickListener {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = "mailto:mfcrisis2016@gmail.com".toUri()
+                    putExtra(Intent.EXTRA_SUBJECT, "")
+                }
+
+                /* optional: restrict to Gmail app if installed */
+                intent.setPackage("com.google.android.gm")
+
+                if (intent.resolveActivity(context.packageManager) != null) {
+                    context.startActivity(intent)
+                }
+            }
+
+            imgTelegram.setOnClickListener {
+                val telegramIntent = Intent(Intent.ACTION_VIEW).apply {
+                    data = "https://t.me/zenDEv2".toUri()/* optional: limit to Telegram app only */
+                    setPackage("org.telegram.messenger")
+                }
+
+                if (telegramIntent.resolveActivity(context.packageManager) != null) {
+                    context.startActivity(telegramIntent)
+                } else {/* fallback: open in browser if Telegram is not installed */
+                    val browserIntent = Intent(Intent.ACTION_VIEW, "https://t.me/zenDEv2".toUri())
+                    context.startActivity(browserIntent)
+                }
+            }
+
+            imgInstagram.setOnClickListener {
+                val uri = "http://instagram.com/_u/mehdi.la.79".toUri()
+                val instagramIntent = Intent(Intent.ACTION_VIEW, uri).apply {
+                    setPackage("com.instagram.android")
+                }
+
+                if (instagramIntent.resolveActivity(context.packageManager) != null) {
+                    context.startActivity(instagramIntent)
+                } else {/* fallback to browser if Instagram app isn't installed */
+                    val webIntent = Intent(
+                        Intent.ACTION_VIEW, "http://instagram.com/mehdi.la.79".toUri()
+                    )
+
+                    context.startActivity(webIntent)
+                }
+            }
+
+            imgGithub.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, "https://github.com/mehdiprgm".toUri())
+                context.startActivity(intent)
+            }
+
+            dialog.show()
+        }
     }
 }
