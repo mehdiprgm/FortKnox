@@ -112,7 +112,7 @@ class AccountDetailsDialog(private val context: Context, private var account: Ac
                 b.imgIcon.setImageResource(R.drawable.ic_chrome)
             }
 
-            "Email address" -> {
+            "Email Address" -> {
                 b.imgIcon.setImageResource(R.drawable.ic_google)
             }
 
