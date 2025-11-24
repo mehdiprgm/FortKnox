@@ -54,34 +54,42 @@
             app:layout_constraintTop_toBottomOf="@+id/tvTitle"
             tools:ignore="HardcodedText" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnYes"
-            style="@style/ButtonStyle"
+        <LinearLayout
+            android:id="@+id/layButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            android:background="@android:color/transparent"
-            android:text="Yes"
-            android:textColor="@color/theme"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvMessage"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMessage">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnNo"
-            style="@style/ButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:background="@android:color/transparent"
-            android:text="No"
-            android:textColor="@color/theme"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/btnYes"
-            app:layout_constraintEnd_toStartOf="@+id/btnYes"
-            app:layout_constraintTop_toTopOf="@+id/btnYes"
-            tools:ignore="HardcodedText" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnYes"
+                style="@style/ButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:text="Yes"
+                android:textColor="@color/theme"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNo"
+                style="@style/ButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="No"
+                android:textColor="@color/theme"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
