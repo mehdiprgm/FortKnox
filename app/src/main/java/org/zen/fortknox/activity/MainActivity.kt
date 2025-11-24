@@ -127,6 +127,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
                 menuItem.isChecked = true
                 loadNotes()
             }
+
+            R.id.menuAboutUs -> {
+                Dialogs.showAboutUs(this)
+            }
         }
 
         /* Prevent multiselection in the menu *//* Otherwise it create a bug */
