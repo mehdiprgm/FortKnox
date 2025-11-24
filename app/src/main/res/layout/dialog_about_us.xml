@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/ScrollView"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,7 +17,6 @@
             android:id="@+id/layTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/panelBackground"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp"
@@ -45,6 +45,7 @@
                 style="@style/TextSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/foreground_less"
                 android:layout_marginTop="10dp"
                 android:text="Created by zenDEv - 2025"
                 tools:ignore="HardcodedText" />
@@ -59,6 +60,7 @@
                 tools:ignore="HardcodedText" />
 
             <LinearLayout
+                android:id="@+id/layContactUs"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
@@ -97,9 +99,21 @@
                     android:src="@drawable/ic_github" />
             </LinearLayout>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOk"
+                style="@style/ButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/transparent"
+                android:text="OK"
+                android:textColor="@color/theme"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layContactUs"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
