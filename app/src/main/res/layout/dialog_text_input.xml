@@ -19,7 +19,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/tvMessage"
@@ -30,7 +31,8 @@
         android:text="Message"
         app:layout_constraintEnd_toEndOf="@+id/tvTitle"
         app:layout_constraintStart_toStartOf="@+id/tvTitle"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/txtInput"
@@ -54,8 +56,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:background="@drawable/layout_background_borderless"
         android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtInput">
@@ -63,21 +65,20 @@
         <Button
             android:id="@+id/btnCancel"
             style="@style/ButtonStyle"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
             android:background="@android:color/transparent"
             android:text="Cancel"
             android:textColor="@color/theme"
+            android:layout_marginEnd="10dp"
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/btnOk"
             style="@style/ButtonStyle"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
             android:background="@android:color/transparent"
             android:text="OK"
             android:textColor="@color/theme"
