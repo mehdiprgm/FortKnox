@@ -84,7 +84,9 @@ fun getSettings(): AppSettings {
 fun createNewSettingsObject() : AppSettings {
     val settings = AppSettings(
         theme = Theme.System,
-        confirmExit = true
+        confirmExit = true,
+        allowScreenshot = false,
+        lockTimeout = 10
     )
 
     return settings
