@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/theme"
+    android:background="@drawable/layout_gradient_color"
     android:padding="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -45,7 +45,7 @@
         android:layout_height="50dp"
         android:contentDescription="Search"
         android:src="@drawable/ic_sun"
-        app:backgroundTint="@color/theme"
+        app:backgroundTint="@android:color/transparent"
         app:elevation="0dp"
         app:fabCustomSize="50dp"
         app:tint="@color/black"
