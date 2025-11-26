@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         disableScreenPadding(b.root)
 
         initViewModels()
+        setupBackPressListener()
         setupMenuHeader()
         setupSearchBar()
 
@@ -138,6 +140,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         b.root.closeDrawer(GravityCompat.START)
 
         return true
+    }
+
+    private fun setupBackPressListener() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {/* Have to check the information before exit */
+                if (isSelectionModeActivated) {
+                    disableSelectionMode()
+                } else {
+                    finish()
+                }
+            }
+        }
+
+        onBackPressedDispatcher.addCallback(this, callback)
     }
 
     private fun setupMenuHeader() {
