@@ -17,4 +17,13 @@ data class ApiUser(
     var isLocked: Boolean,
     var isRoot: Boolean,
     var createDate: String
-) : Parcelable
+) : Parcelable {
+    fun convertUserToJson() : String {
+        return "json"
+    }
+
+    fun convertJsonToUser() : ApiUser {
+        return null
+    }
+
+}
