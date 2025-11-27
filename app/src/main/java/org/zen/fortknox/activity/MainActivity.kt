@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var noteAdapter: NoteAdapter
 
     private var isSelectionModeActivated = false
+    private var backPressedTime = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -150,11 +152,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
     private fun setupBackPressListener() {
         val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {/* Have to check the information before exit */
+            override fun handleOnBackPressed() {
                 if (isSelectionModeActivated) {
                     disableSelectionMode()
                 } else {
-                    finish()
+                    val currentTime = System.currentTimeMillis()
+
+                    /* If user press back button again under 3 seconds */
+                    if (currentTime - backPressedTime < 3000) {
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Press back button again to exit",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        /* Close screen and update pressed time to current time */
+                        backPressedTime = currentTime
+                    }
                 }
             }
         }
