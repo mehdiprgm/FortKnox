@@ -189,8 +189,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         val userJson = pref.getString("User", "")
 
         /* Convert user json into user object, so we can use it in the application */
-        val type = object : TypeToken<ApiUser>() {}.type
-        val userObject = Gson().fromJson<ApiUser>(userJson, type)
+        val userObject = ApiUser.convertJsonToUser(userJson!!)
 
         val tvUsername = view.findViewById<TextView>(R.id.tvUsername)
         val tvEmailAddress = view.findViewById<TextView>(R.id.tvEmailAddress)
