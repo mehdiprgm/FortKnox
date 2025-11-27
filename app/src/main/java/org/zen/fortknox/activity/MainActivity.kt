@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -487,20 +488,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
     private fun showEmptyList(visible: Boolean) {
         val animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
-        animation.duration = 500
+        animation.duration = 600
+
+        b.lottieEmpty.isVisible = visible
+        b.tvEmpty.isVisible = visible
+        b.tvEmptyDescription.isVisible = visible
 
         if (visible) {
-            b.lottieEmpty.visibility = View.VISIBLE
-            b.tvEmpty.visibility = View.VISIBLE
-
             b.lottieEmpty.animation = animation
             b.tvEmpty.animation = animation
+            b.tvEmptyDescription.animation = animation
         } else {
             b.lottieEmpty.animation = null
             b.tvEmpty.animation = null
-
-            b.lottieEmpty.visibility = View.GONE
-            b.tvEmpty.visibility = View.GONE
+            b.tvEmptyDescription.animation = null
         }
     }
 
