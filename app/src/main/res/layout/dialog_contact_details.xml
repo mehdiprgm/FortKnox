@@ -174,26 +174,6 @@
             app:layout_constraintTop_toBottomOf="@+id/tvPhoneNumberTitle" />
 
         <TextView
-            android:id="@+id/tvExtraInformationTitle"
-            style="@style/TextNormal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Extra information"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPhoneNumber" />
-
-        <TextView
-            android:id="@+id/tvExtraInformation"
-            style="@style/TextSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Something"
-            android:textColor="@color/foreground_less"
-            app:layout_constraintStart_toStartOf="@+id/tvExtraInformationTitle"
-            app:layout_constraintTop_toBottomOf="@+id/tvExtraInformationTitle" />
-
-        <TextView
             android:id="@+id/tvCreateDateTitle"
             style="@style/TextNormal"
             android:layout_width="wrap_content"
@@ -201,7 +181,7 @@
             android:layout_marginTop="15dp"
             android:text="Create date"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvExtraInformation" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPhoneNumber" />
 
         <TextView
             android:id="@+id/tvCreateDate"
