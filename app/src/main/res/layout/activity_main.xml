@@ -89,7 +89,7 @@
 
             <TextView
                 android:id="@+id/tvEmpty"
-                style="@style/TextSmall"
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Noting found"
@@ -97,6 +97,18 @@
                 app:layout_constraintEnd_toEndOf="@+id/lottieEmpty"
                 app:layout_constraintStart_toStartOf="@+id/lottieEmpty"
                 app:layout_constraintTop_toBottomOf="@+id/lottieEmpty"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvEmptyDescription"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Use + button to add new item"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/tvEmpty"
+                app:layout_constraintStart_toStartOf="@+id/tvEmpty"
+                app:layout_constraintTop_toBottomOf="@+id/tvEmpty"
                 tools:ignore="HardcodedText" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -44,7 +44,6 @@ import org.zen.fortknox.dialog.bottom.details.NoteDetailsDialog
 import org.zen.fortknox.tools.applySettings
 import org.zen.fortknox.tools.changeThemeButtonIcon
 import org.zen.fortknox.tools.disableScreenPadding
-import org.zen.fortknox.tools.disableScreenshot
 import org.zen.fortknox.tools.getSettings
 import org.zen.fortknox.tools.preferencesName
 import org.zen.fortknox.tools.selectedItems
