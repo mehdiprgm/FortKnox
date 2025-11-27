@@ -450,7 +450,6 @@ class Dialogs {
             imgGmail.setOnClickListener {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
                     data = "mailto:mfcrisis2016@gmail.com".toUri()
-                    putExtra(Intent.EXTRA_SUBJECT, "")
                 }
 
                 /* Optional: restrict to Gmail app if installed */
