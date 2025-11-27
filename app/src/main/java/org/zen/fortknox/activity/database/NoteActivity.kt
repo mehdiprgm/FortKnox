@@ -139,8 +139,7 @@ class NoteActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun isFormInformationChanged(): Boolean {/* For update scenario, it should check all the information and compare to original *//* If anything changed it means, it has to give warning, otherwise it's good and can exit *//* For create scenario, all it needs is to check all the field for inputs *//* If any information entered, it will give warning to the user */
         if (isUpdatingEntity) {
-            val databaseText =
-                "${note!!.name},${note!!.content}"
+            val databaseText = note!!.content
 
             return databaseText != b.txtContent.text.toString()
         } else {/* Append all text and check to see if form is empty or not */
