@@ -145,9 +145,9 @@
                     android:background="@drawable/edittext_state_background"
                     android:drawableStart="@drawable/ic_phone2_smaller"
                     android:drawablePadding="15dp"
-                    android:hint="09032748106"
+                    android:hint="0903 - 2748106"
                     android:inputType="phone"
-                    android:maxLength="11"
+                    android:maxLength="16"
                     android:singleLine="true"
                     tools:ignore="HardcodedText" />
             </com.google.android.material.textfield.TextInputLayout>
