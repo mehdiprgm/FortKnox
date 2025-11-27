@@ -44,10 +44,12 @@ import org.zen.fortknox.dialog.bottom.details.NoteDetailsDialog
 import org.zen.fortknox.tools.applySettings
 import org.zen.fortknox.tools.changeThemeButtonIcon
 import org.zen.fortknox.tools.disableScreenPadding
+import org.zen.fortknox.tools.disableScreenshot
 import org.zen.fortknox.tools.getSettings
 import org.zen.fortknox.tools.preferencesName
 import org.zen.fortknox.tools.selectedItems
 import org.zen.fortknox.tools.selectedViews
+import org.zen.fortknox.tools.setScreenshotStatus
 import org.zen.fortknox.tools.theme.changeTheme
 import org.zen.fortknox.viewmodel.DatabaseViewModel
 
@@ -85,6 +87,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
         /* Default load all accounts */
         onNavigationItemSelected(b.navMenu.menu.findItem(R.id.menuAccounts))
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        /* Allow taking screenshots */
+        setScreenshotStatus(getSettings().allowScreenshot)
     }
 
     override fun onClick(view: View?) {

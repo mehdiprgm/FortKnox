@@ -18,6 +18,7 @@ import org.zen.fortknox.tools.disableScreenPadding
 import org.zen.fortknox.tools.getDate
 import org.zen.fortknox.tools.getSettings
 import org.zen.fortknox.tools.pasteFromClipboard
+import org.zen.fortknox.tools.setScreenshotStatus
 import org.zen.fortknox.viewmodel.DatabaseViewModel
 
 class NoteActivity : AppCompatActivity(), View.OnClickListener {
@@ -41,6 +42,13 @@ class NoteActivity : AppCompatActivity(), View.OnClickListener {
 
         b.btnClose.setOnClickListener(this)
         b.btnMenu.setOnClickListener(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        /* Allow taking screenshots */
+        setScreenshotStatus(getSettings().allowScreenshot)
     }
 
     override fun onClick(view: View?) {

@@ -18,6 +18,7 @@ import org.zen.fortknox.tools.disableScreenPadding
 import org.zen.fortknox.tools.getAllViews
 import org.zen.fortknox.tools.getDate
 import org.zen.fortknox.tools.getSettings
+import org.zen.fortknox.tools.setScreenshotStatus
 import org.zen.fortknox.tools.validateData
 import org.zen.fortknox.viewmodel.DatabaseViewModel
 
@@ -43,6 +44,13 @@ class AccountActivity : AppCompatActivity(), View.OnClickListener {
         b.layAccountType.setOnClickListener(this)
         b.btnClose.setOnClickListener(this)
         b.btnFinish.setOnClickListener(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        /* Allow taking screenshots */
+        setScreenshotStatus(getSettings().allowScreenshot)
     }
 
     override fun onClick(view: View?) {
