@@ -209,10 +209,9 @@ class PasscodeLoginActivity : AppCompatActivity(), View.OnClickListener, TextWat
             val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
 
             val userJson = pref.getString("User", "")
+            val userObject = ApiUser.convertJsonToUser(userJson!!)
 
-            val type = object : TypeToken<ApiUser>() {}.type
-            val userObject = Gson().fromJson<ApiUser>(userJson, type)
-
+            /* Read the user from local database and load the security code */
             val user = databaseViewModel.getUser(userObject.username)
             databaseSecurityCode = user?.securityCode ?: ""
         } catch (ex: Exception) {
