@@ -20,11 +20,15 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         b = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(b.root)
         disableScreenPadding(b.root)
+
+        b.btnClose.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {
         when(view?.id) {
-
+            R.id.btnClose -> {
+                finish()
+            }
         }
     }
 }
