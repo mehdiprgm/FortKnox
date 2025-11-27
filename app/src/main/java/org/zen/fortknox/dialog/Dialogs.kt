@@ -453,7 +453,7 @@ class Dialogs {
                     putExtra(Intent.EXTRA_SUBJECT, "")
                 }
 
-                /* optional: restrict to Gmail app if installed */
+                /* Optional: restrict to Gmail app if installed */
                 intent.setPackage("com.google.android.gm")
 
                 if (intent.resolveActivity(context.packageManager) != null) {
