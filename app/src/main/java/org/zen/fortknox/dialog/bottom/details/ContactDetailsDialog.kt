@@ -107,13 +107,6 @@ class ContactDetailsDialog(private val context: Context, private var contact: Co
     private fun loadContactInformation() {
         b.tvName.text = contact.name
         b.tvPhoneNumber.text = contact.phoneNumber
-
-        if (contact.extraInformation.isEmpty()) {
-            b.tvExtraInformation.text = "Nothing to show"
-        } else {
-            b.tvExtraInformation.text = contact.extraInformation
-        }
-
         b.tvCreateDate.text = contact.createDate
     }
 }
