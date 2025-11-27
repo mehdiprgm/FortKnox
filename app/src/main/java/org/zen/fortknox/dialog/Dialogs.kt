@@ -299,7 +299,7 @@ class Dialogs {
                     }
                 }
 
-                when(defaultValue) {
+                when (defaultValue) {
                     "Social Media" -> {
                         buttons[0].isChecked = true
                     }
@@ -332,7 +332,7 @@ class Dialogs {
 
         @JvmStatic
         fun showAboutUs(context: Context) {
-            val dialog = createDialog(context, R.layout.dialog_about_us, false)
+            val dialog = createDialog(context, R.layout.dialog_about_us, true)
             startDialogAnimation(dialog.findViewById(R.id.main))
 
             val btnOk = dialog.findViewById<MaterialButton>(R.id.btnOk)
