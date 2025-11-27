@@ -84,6 +84,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                             this@LoginActivity, "Logging in", "Checking the username, please wait..."
                         )
 
+                        /* Send request and get the user from server */
                         loadingDialog.show()
                         val result = apiViewModel.getUser(username)
                         loadingDialog.dismiss()
@@ -93,6 +94,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                                 if (password == user.password) {
                                     val isLocked = user.isLocked
 
+                                    /* The account is locked */
                                     if (isLocked) {
                                         Dialogs.showMessage(
                                             this@LoginActivity,
