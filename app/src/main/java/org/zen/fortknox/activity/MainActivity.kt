@@ -169,9 +169,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
                         finish()
                     } else {
                         Toast.makeText(
-                            this@MainActivity,
-                            "Press back button again to exit",
-                            Toast.LENGTH_SHORT
+                            this@MainActivity, "Press back button again to exit", Toast.LENGTH_SHORT
                         ).show()
 
                         /* Close screen and update pressed time to current time */
@@ -185,14 +183,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun setupMenuHeader() {
-        try {
-            /* Ge the menu view */
+        try {/* Ge the menu view */
             val view: View = b.navMenu.getHeaderView(0)
             val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
             val settings = getSettings()
 
-            /* Read username from preferences */
-            /* Get user from database using username from preferences */
+            /* Read username from preferences *//* Get user from database using username from preferences */
             val username = pref.getString("Username", "")
             val user = databaseViewModel.getUser(username!!)
 
