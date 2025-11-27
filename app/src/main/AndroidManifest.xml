@@ -12,6 +12,40 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <queries>
+
+        <!-- 1. Explicitly queried packages (for setPackage() + resolveActivity checks) -->
+
+
+        <!-- Gmail app check (imgGmail) -->
+        <package android:name="com.google.android.gm" />
+
+        <!-- Telegram app check (imgTelegram) -->
+        <package android:name="org.telegram.messenger" />
+
+        <!-- Instagram app check (imgInstagram) -->
+        <package android:name="com.instagram.android" />
+
+        <!-- 2. General Intent queries (for implicit intents and fallbacks) -->
+
+
+        <!-- For mailto: intents (used by imgGmail, if not restricted by setPackage) -->
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+
+            <data android:scheme="mailto" />
+        </intent>
+
+        <!-- For general web links (used by imgGithub and browser fallbacks for Instagram/Telegram) -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <!-- Ensures visibility of browsers for https/http links -->
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,6 +55,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FortKnox">
+        <activity
+            android:name=".activity.application.SettingsActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.database.NoteActivity"
             android:exported="false" />
@@ -68,35 +105,5 @@
                 android:resource="@xml/file_paths" />
         </provider>
     </application>
-
-    <queries>
-        <!-- 1. Explicitly queried packages (for setPackage() + resolveActivity checks) -->
-
-        <!-- Gmail app check (imgGmail) -->
-        <package android:name="com.google.android.gm" />
-
-        <!-- Telegram app check (imgTelegram) -->
-        <package android:name="org.telegram.messenger" />
-
-        <!-- Instagram app check (imgInstagram) -->
-        <package android:name="com.instagram.android" />
-
-        <!-- 2. General Intent queries (for implicit intents and fallbacks) -->
-
-        <!-- For mailto: intents (used by imgGmail, if not restricted by setPackage) -->
-        <intent>
-            <action android:name="android.intent.action.SENDTO" />
-            <data android:scheme="mailto" />
-        </intent>
-
-        <!-- For general web links (used by imgGithub and browser fallbacks for Instagram/Telegram) -->
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <!-- Ensures visibility of browsers for https/http links -->
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="https" />
-        </intent>
-
-    </queries>
 
 </manifest>
