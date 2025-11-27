@@ -335,8 +335,6 @@ class Dialogs {
             val dialog = createDialog(context, R.layout.dialog_about_us, true)
             startDialogAnimation(dialog.findViewById(R.id.main))
 
-            val btnOk = dialog.findViewById<MaterialButton>(R.id.btnOk)
-
             val imgGmail = dialog.findViewById<ImageView>(R.id.imgGmail)
             val imgTelegram = dialog.findViewById<ImageView>(R.id.imgTelegram)
             val imgInstagram = dialog.findViewById<ImageView>(R.id.imgInstagram)
@@ -390,10 +388,6 @@ class Dialogs {
             imgGithub.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, "https://github.com/mehdiprgm".toUri())
                 context.startActivity(intent)
-            }
-
-            btnOk.setOnClickListener {
-                dialog.dismiss()
             }
 
             dialog.show()
