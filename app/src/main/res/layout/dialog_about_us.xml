@@ -2,8 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/ScrollView"
     android:id="@+id/main"
+    style="@style/ScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,8 +13,8 @@
         android:background="@drawable/dialog_background"
         android:padding="20dp">
 
-        <LinearLayout
-            android:id="@+id/layTop"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -25,47 +25,62 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:contentDescription="@null"
-                android:src="@drawable/desert_fort" />
+                android:src="@drawable/desert_fort"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvAppName"
                 style="@style/TextExtraBig"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:fontFamily="@font/hitmaker_font"
+                android:layout_marginTop="20dp"
                 android:text="@string/app_name"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/imageView"
+                app:layout_constraintStart_toStartOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
             <TextView
-                android:id="@+id/tvAppCreator"
+                android:id="@+id/tvAppVersion"
                 style="@style/TextSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/app_version"
                 android:textColor="@color/foreground_less"
-                android:layout_marginTop="10dp"
-                android:text="Created by zenDEv - 2025"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintBottom_toBottomOf="@+id/tvAppName"
+                app:layout_constraintStart_toEndOf="@+id/tvAppName" />
+
 
             <TextView
                 android:id="@+id/tvDeveloperInformation"
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                style="@style/TextNormal"
+                android:layout_marginTop="20dp"
                 android:text="Hi my name is mehdi, 25 years old developer and i currently live in Iran, Karaj city.\n\nI love application development and build stuff to help people and teach other engineers how to program"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAppName"
                 tools:ignore="HardcodedText" />
 
             <LinearLayout
                 android:id="@+id/layContactUs"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/tvDeveloperInformation"
+                app:layout_constraintStart_toStartOf="@+id/tvDeveloperInformation"
+                app:layout_constraintTop_toBottomOf="@+id/tvDeveloperInformation">
 
                 <ImageView
                     android:id="@+id/imgGmail"
@@ -99,24 +114,20 @@
                     android:src="@drawable/ic_github" />
             </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnOk"
-                style="@style/ButtonStyle"
+            <TextView
+                android:id="@+id/tvAppCreator"
+                style="@style/TextSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Created by zenDEv - 2025"
                 android:layout_marginTop="20dp"
-                android:background="@android:color/transparent"
-                android:text="OK"
-                android:textColor="@color/theme"
-                android:textStyle="bold"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/foreground_less"
+                app:layout_constraintEnd_toEndOf="@+id/layContactUs"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layContactUs"
                 tools:ignore="HardcodedText" />
-        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
