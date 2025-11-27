@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import org.zen.fortknox.api.entity.ApiUser
 import org.zen.fortknox.databinding.FragmentRegisterProfileBasicInformationBinding
 import org.zen.fortknox.tools.formatting.PhoneNumberFormattingTextWatcher
@@ -43,7 +44,7 @@ class RegisterProfileBasicInformationFragment : Fragment() {
         )
 
         score += b.txtLayPhoneNumber.validateData(
-            b.txtPhoneNumber.text.toString().length != 11, "Phone number is not valid"
+            b.txtPhoneNumber.text.toString().length != 15, "Phone number is not valid"
         )
 
         score += b.txtLayPassword.validateData(
