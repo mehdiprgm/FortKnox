@@ -43,7 +43,7 @@ class NoteAdapter(private val context: Context) :
         holder: NoteViewHolder, position: Int
     ) {
         val note = notes[position]
-        var content = note.content
+        val content = note.content.getFirstLine().trim()
         val b = holder.binding
 
         val popInAnim = AnimationUtils.loadAnimation(context, R.anim.pop_in)
@@ -58,17 +58,12 @@ class NoteAdapter(private val context: Context) :
         }
 
         b.tvNoteName.text = note.name.replaceFirstChar { it.uppercase() }
-        b.tvContent.text = note.content
+        b.tvContent.text = content
         b.tvModifyDate.text = note.modifyDate
-
-        /* Only get the first line */
-        if (content.isMultiText()) {
-            content = content.getFirstLine()
-        }
 
         /* Only get first 50 characters */
         if (content.length > 50) {
-            content = "${content.take(57)} ..."
+            b.tvContent.text = "${content.take(47)} ..."
         }
 
         b.chkSelected.isVisible = showCheckBoxes
