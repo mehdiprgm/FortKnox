@@ -24,3 +24,11 @@ fun changeTheme(theme: Theme) {
         }
     }
 }
+
+fun getThemeText(theme: Theme) : String {
+    return when(theme) {
+        Theme.System -> "System"
+        Theme.Dark -> "Dark"
+        Theme.Light -> "Light"
+    }
+}
