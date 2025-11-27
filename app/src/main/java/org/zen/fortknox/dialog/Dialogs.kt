@@ -334,7 +334,7 @@ class Dialogs {
         @JvmStatic
         suspend fun selectTheme(context: Context, theme: Theme): Theme =
             suspendCancellableCoroutine { continuation ->
-                val dialog = createDialog(context, R.layout.dialog_select_theme, true)
+                val dialog = createDialog(context, R.layout.dialog_select_theme, false)
                 startDialogAnimation(dialog.findViewById(R.id.main))
 
                 var selectedTheme = Theme.System
@@ -373,6 +373,63 @@ class Dialogs {
 
                 btnOk.setOnClickListener {
                     continuation.resume(selectedTheme)
+                    dialog.dismiss()
+                }
+
+                dialog.show()
+            }
+
+        @JvmStatic
+        suspend fun selectLockTimeout(context: Context, defaultTimeOut: Int): Int =
+            suspendCancellableCoroutine { continuation ->
+                val dialog = createDialog(context, R.layout.dialog_select_lock_timeout, false)
+                startDialogAnimation(dialog.findViewById(R.id.main))
+
+                var lockTimeout = 5
+
+                val btnOk = dialog.findViewById<MaterialButton>(R.id.btnOk)
+
+                val btn5Seconds = dialog.findViewById<RadioButton>(R.id.btn5Seconds)
+                val btn10Seconds = dialog.findViewById<RadioButton>(R.id.btn10Seconds)
+                val btn15Seconds = dialog.findViewById<RadioButton>(R.id.btn15Seconds)
+                val btn30Seconds = dialog.findViewById<RadioButton>(R.id.btn30Seconds)
+
+                when(defaultTimeOut) {
+                    5 -> {
+                        btn5Seconds.isChecked = true
+                    }
+
+                    10 -> {
+                        btn10Seconds.isChecked = true
+                    }
+
+                    15 -> {
+                        btn15Seconds.isChecked = true
+                    }
+
+                    30 -> {
+                        btn30Seconds.isChecked = true
+                    }
+                }
+
+                btn5Seconds.setOnClickListener {
+                    lockTimeout = 5
+                }
+
+                btn10Seconds.setOnClickListener {
+                    lockTimeout = 10
+                }
+
+                btn15Seconds.setOnClickListener {
+                    lockTimeout = 15
+                }
+
+                btn30Seconds.setOnClickListener {
+                    lockTimeout = 30
+                }
+
+                btnOk.setOnClickListener {
+                    continuation.resume(lockTimeout)
                     dialog.dismiss()
                 }
 
