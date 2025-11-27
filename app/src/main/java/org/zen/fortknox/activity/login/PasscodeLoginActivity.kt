@@ -70,12 +70,13 @@ class PasscodeLoginActivity : AppCompatActivity(), View.OnClickListener, TextWat
         b.btnClear.setOnClickListener(this)
 
         lockOrientation()
-        loadDatabaseSecurityCode()
     }
 
     override fun onResume() {
         super.onResume()
         startKeyPadAnimation()
+
+        loadDatabaseSecurityCode()
     }
 
     override fun onClick(view: View?) {
