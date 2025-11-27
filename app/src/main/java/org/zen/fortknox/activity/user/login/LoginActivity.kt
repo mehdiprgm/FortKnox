@@ -211,15 +211,14 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private suspend fun isUserSavedLocalDatabase(apiUser: ApiUser): Boolean {
         return try {
+            /* Insert user into local database */
+            /* Also put username into the preferences to get the user object from database later */
             val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
             databaseViewModel.addUser(apiUser.toDatabaseUser())
 
-            val gson = Gson()
-            val userJson = gson.toJson(apiUser)
-
             pref.edit(commit = true) {
                 putBoolean("LoggedIn", true)
-                putString("User", userJson)
+                putString("Username", apiUser.username)
             }
 
             true
