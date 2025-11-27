@@ -19,8 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
 import org.zen.fortknox.R
 import org.zen.fortknox.activity.application.SettingsActivity
@@ -32,7 +30,6 @@ import org.zen.fortknox.adapter.recyclerview.AccountAdapter
 import org.zen.fortknox.adapter.recyclerview.BankCardAdapter
 import org.zen.fortknox.adapter.recyclerview.ContactAdapter
 import org.zen.fortknox.adapter.recyclerview.NoteAdapter
-import org.zen.fortknox.api.entity.ApiUser
 import org.zen.fortknox.database.entity.Account
 import org.zen.fortknox.database.entity.BankCard
 import org.zen.fortknox.database.entity.Contact
@@ -179,37 +176,41 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun setupMenuHeader() {
-        /* Ge the menu view */
-        val view: View = b.navMenu.getHeaderView(0)
-        val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
-        val settings = getSettings()
+        try {
+            /* Ge the menu view */
+            val view: View = b.navMenu.getHeaderView(0)
+            val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
+            val settings = getSettings()
 
-        /* Read json from preferences */
-        /* We saved entire user object into shared preferences */
-        val userJson = pref.getString("User", "")
+            /* Read json from preferences */
+            /* We saved entire user object into shared preferences */
+            val username = pref.getString("Username", "")
+            val user = databaseViewModel.getUser(username!!)
 
-        /* Convert user json into user object, so we can use it in the application */
-        val userObject = ApiUser.convertJsonToUser(userJson!!)
+            val tvUsername = view.findViewById<TextView>(R.id.tvUsername)
+            val tvEmailAddress = view.findViewById<TextView>(R.id.tvEmailAddress)
+            val btnTheme = view.findViewById<FloatingActionButton>(R.id.btnTheme)
 
-        val tvUsername = view.findViewById<TextView>(R.id.tvUsername)
-        val tvEmailAddress = view.findViewById<TextView>(R.id.tvEmailAddress)
-        val btnTheme = view.findViewById<FloatingActionButton>(R.id.btnTheme)
+            tvUsername.text = user!!.username
+            tvEmailAddress.text = user.emailAddress
+            changeThemeButtonIcon(btnTheme, settings.theme)
 
-        tvUsername.text = userObject.username
-        tvEmailAddress.text = userObject.emailAddress
-        changeThemeButtonIcon(btnTheme, settings.theme)
+            btnTheme.setOnClickListener {
+                /* Set the next theme */
+                val newTheme = settings.theme.next()
 
-        btnTheme.setOnClickListener {
-            /* Set the next theme */
-            val newTheme = settings.theme.next()
+                /* Change button icon */
+                changeThemeButtonIcon(btnTheme, newTheme)
+                changeTheme(newTheme)
 
-            /* Change button icon */
-            changeThemeButtonIcon(btnTheme, newTheme)
-            changeTheme(newTheme)
-
-            /* Apply new theme to the settings */
-            settings.theme = newTheme
-            applySettings(this)
+                /* Apply new theme to the settings */
+                settings.theme = newTheme
+                applySettings(this)
+            }
+        } catch (ex: Exception) {
+            lifecycleScope.launch {
+                Dialogs.showException(this@MainActivity, ex)
+            }
         }
     }
 
