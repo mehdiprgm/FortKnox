@@ -60,11 +60,7 @@ class ContactAdapter(private val context: Context) :
 
         b.tvName.text = contact.name.replaceFirstChar { it.uppercase() }
         b.tvPhoneNumber.text = contact.phoneNumber
-        b.tvExtraInformation.text = contact.extraInformation
-
-        if (contact.extraInformation.isEmpty()) {
-            b.tvExtraInformation.text = "Nothing to show"
-        }
+        b.tvCreateDate.text = contact.createDate
 
         b.chkSelected.isVisible = showCheckBoxes
         b.chkSelected.isChecked = selectedItems.contains(contact)
