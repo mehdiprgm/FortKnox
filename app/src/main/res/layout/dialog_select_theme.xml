@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    style="@style/ScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_background"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/TextBig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Theme"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
+
+        <RadioGroup
+            android:id="@+id/rgTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle">
+
+            <RadioButton
+                android:id="@+id/btnFollowSystem"
+                style="@style/TextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:text="Follow system"
+                tools:ignore="HardcodedText" />
+
+            <RadioButton
+                android:id="@+id/btnDarkMode"
+                style="@style/TextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:text="Dark mode"
+                tools:ignore="HardcodedText" />
+
+            <RadioButton
+                android:id="@+id/btnLightMode"
+                style="@style/TextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:text="Light mode"
+                tools:ignore="HardcodedText" />
+        </RadioGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOk"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="OK"
+            android:textColor="@color/theme"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rgTheme"
+            tools:ignore="HardcodedText" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
