@@ -11,24 +11,12 @@ fun String.isMultiText() : Boolean {
 }
 
 fun String.getFirstLine() : String {
-    val newLineIndex = this.indexOf('\n')
-    val carriageReturnIndex = this.indexOf('\r')
-
-    var endOfFirstLine = -1
-
-    if (newLineIndex != -1 && carriageReturnIndex != -1) {
-        endOfFirstLine = minOf(newLineIndex, carriageReturnIndex)
-    } else if (newLineIndex != -1) {
-        endOfFirstLine = newLineIndex
-    } else if (carriageReturnIndex != -1) {
-        endOfFirstLine = carriageReturnIndex
+    val newLineIndex = this.indexOf(System.lineSeparator())
+    if (newLineIndex == -1) {
+        return this
     }
 
-    return if (endOfFirstLine != -1) {
-        this.substring(0, endOfFirstLine)
-    } else {
-        this
-    }
+    return this.substring(0..newLineIndex)
 }
 
 fun copyTextToClipboard(context: Context, label: String, text: String) {
