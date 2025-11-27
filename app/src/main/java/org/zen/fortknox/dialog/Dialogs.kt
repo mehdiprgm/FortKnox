@@ -382,7 +382,7 @@ class Dialogs {
         @JvmStatic
         suspend fun selectLockTimeout(context: Context, defaultTimeOut: Int): Int? =
             suspendCancellableCoroutine { continuation ->
-                val dialog = createDialog(context, R.layout.dialog_select_lock_timeout, false)
+                val dialog = createDialog(context, R.layout.dialog_select_lock_timeout, true)
                 startDialogAnimation(dialog.findViewById(R.id.main))
 
                 var lockTimeout: Int? = null
