@@ -67,7 +67,7 @@
     </style>
 
     <style name="ButtonStyle" parent="TextNormal">
-        <item name="cornerRadius">10dp</item>
+        <item name="cornerRadius">25dp</item>
         <item name="backgroundTint">@color/theme</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
