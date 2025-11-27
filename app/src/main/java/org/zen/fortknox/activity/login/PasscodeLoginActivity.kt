@@ -159,14 +159,12 @@ class PasscodeLoginActivity : AppCompatActivity(), View.OnClickListener, TextWat
                 /* After 3 times lock the application until cooldown */
                 if (attempts == 3) {
                     attempts = 0
+                    b.txtPasscode.text.clear()
+
+                    resetJob?.cancel()
                     startCountdownTimer(getSettings().lockTimeout)
                 } else {
                     b.tvMessage.text = "The passcode is not valid"
-
-                    /* In 2 seconds, run the following code on the main screen thread */
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        b.tvMessage.text = "Enter Passcode"
-                    }, 2000)
 
                     b.txtPasscode.setText("")
                     b.tvMessage.text = "Passcode is incorrect"
