@@ -1,7 +1,7 @@
 package org.zen.fortknox.tools.theme
 
 enum class Theme {
-    System,Light,Dark ;
+    System, Light, Dark;
 
     fun next(): Theme {
         return when (this) {
