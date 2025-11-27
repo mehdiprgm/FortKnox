@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:text="Enter Passcode"
+            android:gravity="center"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
