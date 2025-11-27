@@ -15,6 +15,14 @@ fun Activity.enableScreenshot() {
     this.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
 }
 
+fun Activity.setScreenshotStatus(takeScreenShot: Boolean) {
+    if (takeScreenShot) {
+        this.enableScreenshot()
+    } else {
+        this.disableScreenshot()
+    }
+}
+
 @SuppressLint("SourceLockedOrientationActivity")
 fun Activity.lockOrientation() {
     this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
