@@ -3,16 +3,332 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    style="@style/ScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/ScrollView"
     tools:context=".activity.application.SettingsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@color/background">
+        android:background="@color/background"
+        android:padding="10dp">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnClose"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="Search"
+            android:src="@drawable/ic_close"
+            app:backgroundTint="@color/background"
+            app:elevation="0dp"
+            app:fabCustomSize="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:maxImageSize="35dp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/TextBig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Settings"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/btnClose"
+            app:layout_constraintStart_toEndOf="@+id/btnClose"
+            app:layout_constraintTop_toTopOf="@+id/btnClose"
+            tools:ignore="HardcodedText" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/laySettings"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnClose">
+
+            <TextView
+                android:id="@+id/tvDisplay"
+                style="@style/TextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Display"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/layTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/layout_background_borderless"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:gravity="center_vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDisplay">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgThemeIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/green"
+                    app:shapeAppearance="@style/CircleImageView"
+                    app:tint="@color/black"
+                    android:src="@drawable/ic_moon"
+                    android:scaleType="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layTheme" />
+
+                <TextView
+                    android:id="@+id/tvThemeKey"
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:text="Theme" />
+
+                <TextView
+                    android:id="@+id/tvThemeValue"
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:gravity="end|center"
+                    android:text="Dark"
+                    android:textColor="@color/foreground_less" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvSecurity"
+                style="@style/TextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Security"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layTheme" />
+
+            <LinearLayout
+                android:id="@+id/layPasscode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/layout_background_borderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSecurity">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgPasscodeIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/blue"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_lock_close"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layTheme"
+                    app:shapeAppearance="@style/CircleImageView"
+                    app:tint="@color/black" />
+
+                <TextView
+                    android:id="@+id/tvPasscodeKey"
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_weight="0.6"
+                    android:text="Passcode" />
+
+                <TextView
+                    android:id="@+id/tvPasscodeValue"
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:gravity="end|center"
+                    android:text="Secured"
+                    android:textColor="@color/foreground_less" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layLockTimeout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_background_borderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginTop="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layPasscode">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgLockTimeoutIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/coral_pink"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_lock_close"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layTheme"
+                    app:shapeAppearance="@style/CircleImageView"
+                    app:tint="@color/black" />
+
+                <TextView
+                    android:id="@+id/tvLockTimeoutKey"
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_weight="0.6"
+                    android:text="Lock timeout" />
+
+                <TextView
+                    android:id="@+id/tvLockTimeoutValue"
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:gravity="end|center"
+                    android:text="5 Seconds"
+                    android:textColor="@color/foreground_less" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layScreenshot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_background_borderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginTop="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layLockTimeout">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgScreenshotIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/gold"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_picture"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layTheme"
+                    app:shapeAppearance="@style/CircleImageView"
+                    app:tint="@color/black" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchAllowScreenshots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:checked="false"
+                    app:thumbTint="@color/foreground"
+                    app:trackTint="@drawable/switch_custom_colors"
+                    android:text="Allow Screenshots"
+                    style="@style/TextNormal"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvAdditional"
+                style="@style/TextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Additional"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layScreenshot" />
+
+            <LinearLayout
+                android:id="@+id/layReportBug"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/layout_background_borderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAdditional">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgReportBugIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/cyan"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_bug"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layTheme"
+                    app:shapeAppearance="@style/CircleImageView"
+                    app:tint="@color/black" />
+
+                <TextView
+                    android:id="@+id/tvReportBugKey"
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_weight="0.6"
+                    android:text="Report bug" />
+
+                <TextView
+                    android:id="@+id/tvReportBugValue"
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:gravity="end|center"
+                    android:text="Send report"
+                    android:textColor="@color/foreground_less" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
