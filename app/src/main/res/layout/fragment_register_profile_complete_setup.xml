@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:hintEnabled="false"
-                app:layout_constraintStart_toStartOf="@+id/txtLayUsername"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvPassword"
                 app:passwordToggleEnabled="true">
 
@@ -103,7 +103,7 @@
                 android:layout_marginTop="10dp"
                 app:endIconMode="clear_text"
                 app:hintEnabled="false"
-                app:layout_constraintStart_toStartOf="@+id/txtLayUsername"
+                app:layout_constraintStart_toStartOf="@+id/txtLaySecurityCode"
                 app:layout_constraintTop_toBottomOf="@+id/tvEmailAddress">
 
                 <com.google.android.material.textfield.TextInputEditText
