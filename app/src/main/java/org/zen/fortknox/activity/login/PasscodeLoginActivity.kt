@@ -74,8 +74,8 @@ class PasscodeLoginActivity : AppCompatActivity(), View.OnClickListener, TextWat
 
     override fun onResume() {
         super.onResume()
-        startKeyPadAnimation()
 
+        startKeyPadAnimation()
         loadDatabaseSecurityCode()
     }
 
