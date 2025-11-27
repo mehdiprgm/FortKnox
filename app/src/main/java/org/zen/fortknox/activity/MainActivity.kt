@@ -182,8 +182,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
             val settings = getSettings()
 
-            /* Read json from preferences */
-            /* We saved entire user object into shared preferences */
+            /* Read username from preferences */
+            /* Get user from database using username from preferences */
             val username = pref.getString("Username", "")
             val user = databaseViewModel.getUser(username!!)
 
