@@ -332,7 +332,7 @@ class Dialogs {
             }
 
         @JvmStatic
-        suspend fun selectTheme(context: Context, theme: Theme): Theme? =
+        suspend fun selectTheme(context: Context, theme: Theme): Theme =
             suspendCancellableCoroutine { continuation ->
                 val dialog = createDialog(context, R.layout.dialog_select_theme, true)
                 startDialogAnimation(dialog.findViewById(R.id.main))
