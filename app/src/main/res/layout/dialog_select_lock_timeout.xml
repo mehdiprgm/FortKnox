@@ -18,14 +18,14 @@
             style="@style/TextBig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Theme"
+            android:text="Lock timeout"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="HardcodedText" />
 
         <RadioGroup
-            android:id="@+id/rgTheme"
+            android:id="@+id/rgLockTimeout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -34,34 +34,44 @@
             app:layout_constraintTop_toBottomOf="@+id/tvTitle">
 
             <RadioButton
-                android:id="@+id/btnFollowSystem"
+                android:id="@+id/btn5Seconds"
                 style="@style/TextNormal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
-                android:text="Follow system"
+                android:text="5 Seconds"
                 tools:ignore="HardcodedText" />
 
             <RadioButton
-                android:id="@+id/btnDarkMode"
+                android:id="@+id/btn10Seconds"
                 style="@style/TextNormal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
-                android:text="Dark mode"
+                android:text="10 Seconds"
                 tools:ignore="HardcodedText" />
 
             <RadioButton
-                android:id="@+id/btnLightMode"
+                android:id="@+id/btn15Seconds"
                 style="@style/TextNormal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
-                android:text="Light mode"
+                android:text="15 Seconds"
+                tools:ignore="HardcodedText" />
+
+            <RadioButton
+                android:id="@+id/btn30Seconds"
+                style="@style/TextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:text="30 Seconds"
                 tools:ignore="HardcodedText" />
         </RadioGroup>
 
@@ -80,7 +90,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rgTheme"
+            app:layout_constraintTop_toBottomOf="@+id/rgLockTimeout"
             tools:ignore="HardcodedText" />
 
 
