@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import org.zen.fortknox.api.entity.ApiUser
 import org.zen.fortknox.databinding.FragmentRegisterProfileBasicInformationBinding
+import org.zen.fortknox.tools.formatting.PhoneNumberFormattingTextWatcher
 import org.zen.fortknox.tools.getDate
 import org.zen.fortknox.tools.validateData
 
@@ -23,6 +24,15 @@ class RegisterProfileBasicInformationFragment : Fragment() {
     ): View {
         b = FragmentRegisterProfileBasicInformationBinding.inflate(layoutInflater)
         return b.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupTextFormatters()
+    }
+
+    private fun setupTextFormatters() {
+        b.txtPhoneNumber.addTextChangedListener(PhoneNumberFormattingTextWatcher())
     }
 
     fun isFormInformationValid(): Boolean {
