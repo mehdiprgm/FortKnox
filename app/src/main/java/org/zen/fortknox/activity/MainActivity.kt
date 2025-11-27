@@ -1,5 +1,6 @@
 package org.zen.fortknox.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,6 +22,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
 import org.zen.fortknox.R
+import org.zen.fortknox.activity.application.SettingsActivity
 import org.zen.fortknox.adapter.interfaces.OnAccountClickListener
 import org.zen.fortknox.adapter.interfaces.OnBankCardClickListener
 import org.zen.fortknox.adapter.interfaces.OnContactClickListener
@@ -128,6 +130,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             R.id.menuNotes -> {
                 menuItem.isChecked = true
                 loadNotes()
+            }
+
+            R.id.menuSettings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
 
             R.id.menuAboutUs -> {
