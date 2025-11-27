@@ -332,12 +332,12 @@ class Dialogs {
             }
 
         @JvmStatic
-        suspend fun selectTheme(context: Context, theme: Theme): Theme =
+        suspend fun selectTheme(context: Context, theme: Theme): Theme? =
             suspendCancellableCoroutine { continuation ->
-                val dialog = createDialog(context, R.layout.dialog_select_theme, false)
+                val dialog = createDialog(context, R.layout.dialog_select_theme, true)
                 startDialogAnimation(dialog.findViewById(R.id.main))
 
-                var selectedTheme = Theme.System
+                var selectedTheme : Theme? = null
 
                 val btnOk = dialog.findViewById<MaterialButton>(R.id.btnOk)
 
@@ -380,12 +380,12 @@ class Dialogs {
             }
 
         @JvmStatic
-        suspend fun selectLockTimeout(context: Context, defaultTimeOut: Int): Int =
+        suspend fun selectLockTimeout(context: Context, defaultTimeOut: Int): Int? =
             suspendCancellableCoroutine { continuation ->
                 val dialog = createDialog(context, R.layout.dialog_select_lock_timeout, false)
                 startDialogAnimation(dialog.findViewById(R.id.main))
 
-                var lockTimeout = 5
+                var lockTimeout: Int? = null
 
                 val btnOk = dialog.findViewById<MaterialButton>(R.id.btnOk)
 
