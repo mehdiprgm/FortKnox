@@ -4,6 +4,9 @@ import android.animation.ObjectAnimator
 import android.app.KeyguardManager
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -13,19 +16,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.zen.fortknox.R
 import org.zen.fortknox.activity.MainActivity
-import org.zen.fortknox.api.entity.ApiUser
 import org.zen.fortknox.databinding.ActivityPasscodeLoginBinding
 import org.zen.fortknox.dialog.DialogType
 import org.zen.fortknox.dialog.Dialogs
 import org.zen.fortknox.tools.disableScreenPadding
 import org.zen.fortknox.tools.getAllViews
+import org.zen.fortknox.tools.getSettings
 import org.zen.fortknox.tools.isDeviceSecure
 import org.zen.fortknox.tools.lockOrientation
 import org.zen.fortknox.tools.preferencesName
@@ -155,38 +156,70 @@ class PasscodeLoginActivity : AppCompatActivity(), View.OnClickListener, TextWat
             } else {
                 attempts++
 
+                /* After 3 times lock the application until cooldown */
                 if (attempts == 3) {
                     attempts = 0
+                    startCountdownTimer(getSettings().lockTimeout)
+                } else {
+                    b.tvMessage.text = "The passcode is not valid"
+
+                    /* In 2 seconds, run the following code on the main screen thread */
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        b.tvMessage.text = "Enter Passcode"
+                    }, 2000)
+
+                    b.txtPasscode.setText("")
+                    b.tvMessage.text = "Passcode is incorrect"
+
+                    /* Cancel previous reset job */
+                    resetJob?.cancel()
+
+                    /* After 2 seconds reset the text */
+                    resetJob = lifecycleScope.launch {
+                        delay(2000)
+                        b.tvMessage.text = "Enter Passcode"
+                    }
+                }
+            }
+        }
+    }
+
+    private fun startCountdownTimer(seconds: Int) {
+        isLoginOptionsEnabled(false)
+
+        val timer =
+            object :
+                CountDownTimer(seconds.toLong() * 1000, 1000) { /* 10 seconds, tick every 1 sec */
+                override fun onTick(millisUntilFinished: Long) {
+                    val secondsRemaining = millisUntilFinished / 1000
+
+                    /* When no seconds left finish the timer */
+                    if (secondsRemaining == 0L) {
+                        onFinish()
+                    } else {
+                        /* Update text on every tick */
+                        b.tvMessage.text =
+                            "Too many attempts\ntry again in $secondsRemaining seconds"
+                    }
                 }
 
-                b.txtPasscode.setText("")
-                b.tvMessage.text = "Passcode is incorrect"
-
-                /* Cancel previous reset job */
-                resetJob?.cancel()
-
-                /* After 2 seconds reset the text */
-                resetJob = lifecycleScope.launch {
-                    delay(2000)
+                override fun onFinish() {
+                    /* Reset everything to normal */
                     b.tvMessage.text = "Enter Passcode"
+                    isLoginOptionsEnabled(true)
                 }
             }
 
-//            if (attempts == 3) {
-//                    attempts = 0
-//
-//                    val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
-//                    val timeout = pref.getInt("LockTimeout", 5)
-//                    startCountdownTimer(timeout)
-//                } else {
-//                    b.tvMessage.text = "The passcode is not valid"
-//
-//                    Handler(Looper.getMainLooper()).postDelayed({
-//                        b.tvMessage.text = "Enter Passcode"
-//                    }, 2000)
-//                }
-//            }
+        timer.start()
+    }
+
+    private fun isLoginOptionsEnabled(enabled: Boolean) {
+        getAllViews(b.main, false).forEach { view ->
+            view.isEnabled = enabled
         }
+
+        /* this must be always disabled */
+        b.txtPasscode.isEnabled = false
     }
 
     private fun startKeyPadAnimation() {
@@ -206,8 +239,7 @@ class PasscodeLoginActivity : AppCompatActivity(), View.OnClickListener, TextWat
     }
 
     private fun loadDatabaseSecurityCode() {
-        try {
-            /* Read the user from local database and load the security code */
+        try {/* Read the user from local database and load the security code */
 
             val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
             val username = pref.getString("Username", "")
