@@ -22,6 +22,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.zen.fortknox.R
 import org.zen.fortknox.tools.startDialogAnimation
+import org.zen.fortknox.tools.theme.Theme
 import kotlin.coroutines.resume
 
 class Dialogs {
@@ -287,18 +288,6 @@ class Dialogs {
                     dialog.findViewById(R.id.btnOthers)
                 )
 
-                /* Write same click listener for all buttons */
-                val clickListener = View.OnClickListener { view ->
-                    when (view.id) {
-                        R.id.btnSocialMedia,
-                        R.id.btnWebsite,
-                        R.id.btnEmailAddress,
-                        R.id.btnOthers -> {
-                            accountType = (view as RadioButton).text.toString()
-                        }
-                    }
-                }
-
                 when (defaultValue) {
                     "Social Media" -> {
                         buttons[0].isChecked = true
@@ -317,6 +306,18 @@ class Dialogs {
                     }
                 }
 
+                /* Write same click listener for all buttons */
+                val clickListener = View.OnClickListener { view ->
+                    when (view.id) {
+                        R.id.btnSocialMedia,
+                        R.id.btnWebsite,
+                        R.id.btnEmailAddress,
+                        R.id.btnOthers -> {
+                            accountType = (view as RadioButton).text.toString()
+                        }
+                    }
+                }
+
                 /* Apply click listener to all buttons */
                 buttons.forEach { button ->
                     button.setOnClickListener(clickListener)
@@ -329,6 +330,55 @@ class Dialogs {
 
                 dialog.show()
             }
+
+        @JvmStatic
+        suspend fun selectTheme(context: Context, theme: Theme): Theme? =
+            suspendCancellableCoroutine { continuation ->
+                val dialog = createDialog(context, R.layout.dialog_select_theme, true)
+                startDialogAnimation(dialog.findViewById(R.id.main))
+
+                var selectedTheme = Theme.System
+
+                val btnOk = dialog.findViewById<MaterialButton>(R.id.btnOk)
+
+                val btnFollowSystem = dialog.findViewById<RadioButton>(R.id.btnFollowSystem)
+                val btnDarkMode = dialog.findViewById<RadioButton>(R.id.btnDarkMode)
+                val btnLightMode = dialog.findViewById<RadioButton>(R.id.btnLightMode)
+
+                when(theme) {
+                    Theme.System -> {
+                        btnFollowSystem.isChecked = true
+                    }
+
+                    Theme.Dark -> {
+                        btnDarkMode.isChecked = true
+                    }
+
+                    Theme.Light -> {
+                        btnLightMode.isChecked = true
+                    }
+                }
+
+                btnFollowSystem.setOnClickListener {
+                    selectedTheme = Theme.System
+                }
+
+                btnDarkMode.setOnClickListener {
+                    selectedTheme = Theme.Dark
+                }
+
+                btnLightMode.setOnClickListener {
+                    selectedTheme = Theme.Light
+                }
+
+                btnOk.setOnClickListener {
+                    continuation.resume(selectedTheme)
+                    dialog.dismiss()
+                }
+
+                dialog.show()
+            }
+
 
         @JvmStatic
         fun showAboutUs(context: Context) {
