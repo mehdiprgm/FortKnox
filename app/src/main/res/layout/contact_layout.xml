@@ -68,28 +68,28 @@
                 tools:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/tvExtraInformationTitle"
+                android:id="@+id/tvCreateDateTitle"
                 style="@style/TextSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@android:color/transparent"
-                android:text="Extra information"
+                android:text="Create date"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/tvPhoneNumber"
                 app:layout_constraintTop_toBottomOf="@+id/tvPhoneNumber"
                 tools:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/tvExtraInformation"
+                android:id="@+id/tvCreateDate"
                 style="@style/TextSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:text="Extra information"
+                android:text="2025 / 11 / 23"
                 android:textColor="@color/foreground_less"
-                app:layout_constraintStart_toStartOf="@+id/tvExtraInformationTitle"
-                app:layout_constraintTop_toBottomOf="@+id/tvExtraInformationTitle"
+                app:layout_constraintStart_toStartOf="@+id/tvCreateDateTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvCreateDateTitle"
                 tools:ignore="HardcodedText" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
