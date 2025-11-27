@@ -38,9 +38,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var apiViewModel: ApiViewModel
 
 
-//    "User created successfully.",
-//    "Your account has been created and you are ready to login to the application",
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
