@@ -1,6 +1,8 @@
 package org.zen.fortknox.api.entity
 
 import android.os.Parcelable
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -18,12 +20,19 @@ data class ApiUser(
     var isRoot: Boolean,
     var createDate: String
 ) : Parcelable {
-    fun convertUserToJson() : String {
-        return "json"
-    }
+    companion object {
+        @JvmStatic
+        fun convertUserToJson(apiUser: ApiUser): String {
+            return Gson().toJson(apiUser)
+        }
 
-    fun convertJsonToUser() : ApiUser {
-        return null
+        @JvmStatic
+        fun convertJsonToUser(userJson: String): ApiUser {
+            val type = object : TypeToken<ApiUser>() {}.type
+            val userObject = Gson().fromJson<ApiUser>(userJson, type)
+
+            return userObject
+        }
     }
 
 }
