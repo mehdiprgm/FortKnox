@@ -206,13 +206,12 @@ class PasscodeLoginActivity : AppCompatActivity(), View.OnClickListener, TextWat
 
     private fun loadDatabaseSecurityCode() {
         try {
-            val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
-
-            val userJson = pref.getString("User", "")
-            val userObject = ApiUser.convertJsonToUser(userJson!!)
-
             /* Read the user from local database and load the security code */
-            val user = databaseViewModel.getUser(userObject.username)
+
+            val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
+            val username = pref.getString("Username", "")
+
+            val user = databaseViewModel.getUser(username!!)
             databaseSecurityCode = user?.securityCode ?: ""
         } catch (ex: Exception) {
             lifecycleScope.launch {
