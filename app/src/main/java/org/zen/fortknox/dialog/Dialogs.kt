@@ -528,8 +528,6 @@ class Dialogs {
             val chkLowerCase = dialog.findViewById<SwitchMaterial>(R.id.switchLowerCase)
 
             btnGeneratePassword.setOnClickListener {
-                layPassword.isVisible = true
-
                 val password = generatePassword(
                     seekLength.progress,
                     chkNumbers.isChecked,
