@@ -5,7 +5,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
-private fun prepareFilePart(file: File, partName: String): MultipartBody.Part {
+fun prepareFilePart(file: File, partName: String): MultipartBody.Part {
     val mediaType = "image/*".toMediaTypeOrNull()
     val requestBody = file.asRequestBody(mediaType)
 
