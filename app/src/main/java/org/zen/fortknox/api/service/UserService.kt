@@ -1,12 +1,15 @@
 package org.zen.fortknox.api.service
 
+import okhttp3.MultipartBody
 import org.zen.fortknox.api.base.response.ApiResponse
 import org.zen.fortknox.api.entity.ApiUser
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface UserService {
@@ -32,4 +35,11 @@ interface UserService {
     // GET users count
     @GET("Users/count")
     suspend fun count(): Response<ApiResponse<Int>>
+
+    @Multipart
+    @POST("/Users/upload/{fileName}")
+    suspend fun uploadUserImage(
+        @Part file: MultipartBody.Part,
+        @Path("fileName") fileName: String
+    ): Response<ApiResponse<String>>
 }
