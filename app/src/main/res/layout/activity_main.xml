@@ -22,9 +22,9 @@
                 android:id="@+id/layTop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
                 android:background="@drawable/layout_background_borderless"
+                android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -32,8 +32,8 @@
                 <ImageView
                     android:id="@+id/imgAppIcon"
                     android:layout_width="0dp"
-                    android:layout_weight="0.15"
                     android:layout_height="32dp"
+                    android:layout_weight="0.15"
                     android:contentDescription="@null"
                     android:src="@drawable/ic_menu"
                     app:layout_constraintStart_toStartOf="parent"
@@ -43,16 +43,16 @@
                     android:id="@+id/txtSearch"
                     style="@style/TextNormal"
                     android:layout_width="0dp"
-                    android:layout_weight="0.9"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
                     android:background="@drawable/edittext_search"
                     android:drawableEnd="@drawable/ic_search"
                     android:drawablePadding="15dp"
                     android:hint="Search"
                     android:inputType="text"
                     android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
                     android:paddingTop="15dp"
+                    android:paddingEnd="10dp"
                     android:paddingBottom="15dp"
                     android:singleLine="true"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -67,8 +67,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layTop" />
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/layBottom"
+                app:layout_constraintTop_toBottomOf="@+id/layTop"
+                tools:layout_editor_absoluteX="10dp" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottieEmpty"
@@ -121,10 +123,62 @@
                 app:backgroundTint="@color/theme"
                 app:elevation="0dp"
                 app:fabCustomSize="60dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/layBottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:tint="@color/black"
                 tools:ignore="HardcodedText" />
+
+            <LinearLayout
+                android:id="@+id/layBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:background="@drawable/layout_background_borderless"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/tvShare"
+                    style="@style/TextSmallClickable"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="Share"
+                    android:textStyle="bold"
+                    app:drawableTopCompat="@drawable/ic_share"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/tvCopy"
+                    style="@style/TextSmallClickable"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="Copy"
+                    android:textStyle="bold"
+                    app:drawableTopCompat="@drawable/ic_copy"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/tvDelete"
+                    style="@style/TextSmallClickable"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:textStyle="bold"
+                    app:drawableTopCompat="@drawable/ic_delete"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
