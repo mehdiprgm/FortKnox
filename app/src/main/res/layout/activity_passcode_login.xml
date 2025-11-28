@@ -20,12 +20,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="Enter Passcode"
             android:gravity="center"
+            android:text="Enter Passcode"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txtLayPasscode"
@@ -170,7 +171,8 @@
                     android:layout_marginEnd="30dp"
                     android:background="@drawable/circle_background"
                     android:gravity="center"
-                    android:text="7" />
+                    android:text="7"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/btn8"
@@ -180,7 +182,8 @@
                     android:layout_marginEnd="30dp"
                     android:background="@drawable/circle_background"
                     android:gravity="center"
-                    android:text="8" />
+                    android:text="8"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/btn9"
@@ -189,7 +192,8 @@
                     android:layout_height="70dp"
                     android:background="@drawable/circle_background"
                     android:gravity="center"
-                    android:text="9" />
+                    android:text="9"
+                    tools:ignore="HardcodedText" />
 
 
             </LinearLayout>
@@ -222,7 +226,8 @@
                     android:layout_marginEnd="30dp"
                     android:background="@drawable/circle_background"
                     android:gravity="center"
-                    android:text="0" />
+                    android:text="0"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/btnEmpty2"
@@ -242,10 +247,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:background="@android:color/transparent"
-            android:text="DELETE"
             android:foreground="?android:attr/selectableItemBackground"
+            android:text="DELETE"
             app:layout_constraintBottom_toTopOf="@+id/imgFingerprint"
-            app:layout_constraintEnd_toEndOf="@+id/layPasscode" />
+            app:layout_constraintEnd_toEndOf="@+id/layPasscode"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/btnClear"
@@ -257,7 +263,8 @@
             android:foreground="?android:attr/selectableItemBackground"
             android:text="CLEAR"
             app:layout_constraintBottom_toTopOf="@+id/imgFingerprint"
-            app:layout_constraintStart_toStartOf="@+id/layPasscode" />
+            app:layout_constraintStart_toStartOf="@+id/layPasscode"
+            tools:ignore="HardcodedText" />
 
         <ImageView
             android:id="@+id/imgFingerprint"
@@ -265,6 +272,7 @@
             android:layout_height="60dp"
             android:layout_marginBottom="5dp"
             android:background="@android:color/transparent"
+            android:contentDescription="@null"
             android:src="@drawable/ic_fingerprint"
             app:layout_constraintBottom_toTopOf="@+id/tvForgetPassword"
             app:layout_constraintEnd_toEndOf="parent"
@@ -279,7 +287,8 @@
             android:textColor="@color/theme"
             app:layout_constraintBottom_toTopOf="@+id/tvUseFingerprint"
             app:layout_constraintEnd_toEndOf="@+id/imgFingerprint"
-            app:layout_constraintStart_toStartOf="@+id/imgFingerprint" />
+            app:layout_constraintStart_toStartOf="@+id/imgFingerprint"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/tvUseFingerprint"
@@ -291,7 +300,8 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvForgetPassword"
-            app:layout_constraintStart_toStartOf="@+id/tvForgetPassword" />
+            app:layout_constraintStart_toStartOf="@+id/tvForgetPassword"
+            tools:ignore="HardcodedText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
