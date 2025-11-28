@@ -12,7 +12,7 @@ sealed class AppException(message: String, cause: Throwable? = null) : Exception
         AppException(message, cause)
 }
 
-fun Throwable.getStackTrace(): String {
+fun Throwable.getStackTraceAsString(): String {
     val sw = StringWriter()
     val pw = PrintWriter(sw)
 
