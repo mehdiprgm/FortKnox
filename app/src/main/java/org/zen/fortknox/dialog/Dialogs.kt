@@ -11,16 +11,25 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RadioButton
+import android.widget.RatingBar
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.zen.fortknox.R
+import org.zen.fortknox.tools.copyTextToClipboard
+import org.zen.fortknox.tools.generatePassword
+import org.zen.fortknox.tools.getPasswordStrength
 import org.zen.fortknox.tools.startDialogAnimation
 import org.zen.fortknox.tools.theme.Theme
 import kotlin.coroutines.resume
@@ -495,6 +504,68 @@ class Dialogs {
                 val intent = Intent(Intent.ACTION_VIEW, "https://github.com/mehdiprgm".toUri())
                 context.startActivity(intent)
             }
+
+            dialog.show()
+        }
+
+        @JvmStatic
+        fun generateNewPassword(context: Context) {
+            val dialog = createDialog(context, R.layout.dialog_new_password, true)
+            startDialogAnimation(dialog.findViewById(R.id.main))
+
+            val btnGeneratePassword = dialog.findViewById<Button>(R.id.btnGeneratePassword)
+            val btnCopyPassword = dialog.findViewById<FloatingActionButton>(R.id.btnCopyPassword)
+
+            val tvPassword = dialog.findViewById<TextView>(R.id.tvPassword)
+            val tvLength = dialog.findViewById<TextView>(R.id.tvLength)
+
+            val layPassword = dialog.findViewById<LinearLayout>(R.id.layPassword)
+            val seekLength = dialog.findViewById<SeekBar>(R.id.seekLength)
+            val rbPasswordStrength = dialog.findViewById<RatingBar>(R.id.rbPasswordStrength)
+
+            val chkNumbers = dialog.findViewById<SwitchMaterial>(R.id.switchNumbers)
+            val chkSymbols = dialog.findViewById<SwitchMaterial>(R.id.switchSymbols)
+            val chkLowerCase = dialog.findViewById<SwitchMaterial>(R.id.switchLowerCase)
+
+            btnGeneratePassword.setOnClickListener {
+                layPassword.isVisible = true
+
+                val password = generatePassword(
+                    seekLength.progress,
+                    chkNumbers.isChecked,
+                    chkSymbols.isChecked,
+                    chkLowerCase.isChecked
+                )
+
+                val strength = getPasswordStrength(password)
+
+                tvPassword.text = password
+                rbPasswordStrength.rating = strength.toFloat()
+            }
+
+            btnCopyPassword.setOnClickListener {
+                copyTextToClipboard(context, "Password", tvPassword.text.toString())
+            }
+
+            seekLength.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                // This method is called when the progress value of the SeekBar changes.
+                override fun onProgressChanged(
+                    seekBar: SeekBar?, progress: Int, fromUser: Boolean
+                ) {
+                    tvLength.text = "Password Length   $progress"
+                }
+
+                // This method is called when the user starts to touch and drag the SeekBar thumb.
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                    // You might use this to show a tooltip or perform a pre-drag action.
+                }
+
+                // This method is called when the user stops touching and dragging the SeekBar thumb.
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                    // This is a good place to perform a final action, like saving the selected value
+                    // or triggering an event based on the final progress.
+                }
+            })
 
             dialog.show()
         }
