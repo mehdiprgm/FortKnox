@@ -80,10 +80,12 @@ dependencies {
     // Fragments
     implementation("androidx.fragment:fragment-ktx:1.8.8")
 
-    // Retrofit and Moshi converter
+    // Retrofit and Moshi (gson) converter
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:4.12.0")
 //    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
     // SQLCipher for Room (for AES-256 database encryption)
