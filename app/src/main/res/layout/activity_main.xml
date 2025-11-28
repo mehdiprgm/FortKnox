@@ -22,7 +22,6 @@
                 android:id="@+id/layTop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:background="@drawable/layout_background_borderless"
