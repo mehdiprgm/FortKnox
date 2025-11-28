@@ -34,8 +34,8 @@ import java.util.Locale
 class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
     private lateinit var b: FragmentRegisterProfileCompleteSetupBinding
 
-    /* This will store the URI of the image taken by camera */
-    private var cameraUri: Uri? = null
+    /* This will store the URI of the image taken by camera or gallery*/
+    private var imageUri: Uri? = null
 
     companion object {
         fun newInstance() = RegisterProfileCompleteSetupFragment()
@@ -84,6 +84,7 @@ class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
         if (result.resultCode == RESULT_OK) {
             result.data?.data?.let { uri ->
                 b.imgProfile.setImageURI(uri)
+                imageUri = uri
             }
         }
     }
@@ -94,7 +95,7 @@ class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
     ) { result ->
         /* If user takes a picture load it into the imageview */
         if (result.resultCode == RESULT_OK) {/* Use the stored URI to display the image */
-            cameraUri?.let { uri ->
+            imageUri?.let { uri ->
                 b.imgProfile.setImageURI(uri)
             }
         }
@@ -214,7 +215,7 @@ class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
             )
 
             // Store the URI so we can use it later to display the image
-            cameraUri = photoUri
+            imageUri = photoUri
 
             /* Create intent to open camera */
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
