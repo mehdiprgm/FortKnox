@@ -21,10 +21,8 @@ import org.zen.fortknox.databinding.DialogBottomNewItemBinding
 import org.zen.fortknox.dialog.Dialogs
 import org.zen.fortknox.viewmodel.DatabaseViewModel
 
-class BottomDialogNewItem() : BottomSheetDialogFragment(),
-    View.OnClickListener {
+class BottomDialogNewItem() : BottomSheetDialogFragment(), View.OnClickListener {
     private lateinit var b: DialogBottomNewItemBinding
-    private lateinit var databaseViewModel: DatabaseViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
@@ -44,8 +42,6 @@ class BottomDialogNewItem() : BottomSheetDialogFragment(),
         super.onViewCreated(view, savedInstanceState)
         isCancelable = true
 
-        setupViewModel()
-
         b.layAccount.setOnClickListener(this)
         b.layBankCard.setOnClickListener(this)
         b.layContact.setOnClickListener(this)
@@ -56,34 +52,29 @@ class BottomDialogNewItem() : BottomSheetDialogFragment(),
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.layAccount -> {
-                startActivity(Intent(context, AccountActivity::class.java))
+                startActivity(Intent(requireContext(), AccountActivity::class.java))
                 dismiss()
             }
 
             R.id.layBankCard -> {
-                startActivity(Intent(context, BankCardActivity::class.java))
+                startActivity(Intent(requireContext(), BankCardActivity::class.java))
                 dismiss()
             }
 
             R.id.layContact -> {
-                startActivity(Intent(context, ContactActivity::class.java))
+                startActivity(Intent(requireContext(), ContactActivity::class.java))
                 dismiss()
             }
 
             R.id.layNote -> {
-                startActivity(Intent(context, NoteActivity::class.java))
+                startActivity(Intent(requireContext(), NoteActivity::class.java))
                 dismiss()
             }
 
             R.id.layPassword -> {
-
-//                Dialogs.Companion.newPassword(context)
+                Dialogs.generateNewPassword(requireContext())
                 dismiss()
             }
         }
-    }
-
-    private fun setupViewModel() {
-//        databaseViewModel = ViewModelProvider(this)[DatabaseViewModel::class.java]
     }
 }
