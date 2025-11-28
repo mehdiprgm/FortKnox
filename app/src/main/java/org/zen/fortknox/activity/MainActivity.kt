@@ -7,12 +7,14 @@ import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -44,12 +46,14 @@ import org.zen.fortknox.dialog.bottom.details.ContactDetailsDialog
 import org.zen.fortknox.dialog.bottom.details.NoteDetailsDialog
 import org.zen.fortknox.tools.applySettings
 import org.zen.fortknox.tools.changeThemeButtonIcon
+import org.zen.fortknox.tools.copyTextToClipboard
 import org.zen.fortknox.tools.disableScreenPadding
 import org.zen.fortknox.tools.getSettings
 import org.zen.fortknox.tools.preferencesName
 import org.zen.fortknox.tools.selectedItems
 import org.zen.fortknox.tools.selectedViews
 import org.zen.fortknox.tools.setScreenshotStatus
+import org.zen.fortknox.tools.shareText
 import org.zen.fortknox.tools.theme.changeTheme
 import org.zen.fortknox.viewmodel.DatabaseViewModel
 
@@ -81,6 +85,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
         b.imgAppIcon.setOnClickListener(this)
         b.btnAdd.setOnClickListener(this)
+
+        b.tvShare.setOnClickListener(this)
+        b.tvCopy.setOnClickListener(this)
+        b.tvDelete.setOnClickListener(this)
 
         /* Set menu item change listener */
         b.navMenu.setNavigationItemSelectedListener(this)
@@ -114,6 +122,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
                 /* Open bottom dialog for creating new item */
                 val newItemDialog = BottomDialogNewItem()
                 newItemDialog.show(supportFragmentManager, "New Item")
+            }
+
+            R.id.tvShare -> {
+                shareSelectedItems()
+            }
+
+            R.id.tvCopy -> {
+                copySelectedItems()
+            }
+
+            R.id.tvDelete -> {
+                deleteSelectedItems()
             }
         }
     }
@@ -227,15 +247,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
 
-            override fun afterTextChanged(s: Editable?) {
-                if (b.navMenu.menu.findItem(R.id.menuAccounts).isChecked) {
-                    loadAccounts(s.toString())
-                } else if (b.navMenu.menu.findItem(R.id.menuBankCards).isChecked) {
-                    loadBankCards(s.toString())
-                } else if (b.navMenu.menu.findItem(R.id.menuContacts).isChecked) {
-                    loadContacts(s.toString())
-                } else if (b.navMenu.menu.findItem(R.id.menuNotes).isChecked) {
-                    loadNotes(s.toString())
+            override fun afterTextChanged(s: Editable?) {/* In the selection mode, we don't want edittext to work */
+                if (!isSelectionModeActivated) {
+                    if (b.navMenu.menu.findItem(R.id.menuAccounts).isChecked) {
+                        loadAccounts(s.toString())
+                    } else if (b.navMenu.menu.findItem(R.id.menuBankCards).isChecked) {
+                        loadBankCards(s.toString())
+                    } else if (b.navMenu.menu.findItem(R.id.menuContacts).isChecked) {
+                        loadContacts(s.toString())
+                    } else if (b.navMenu.menu.findItem(R.id.menuNotes).isChecked) {
+                        loadNotes(s.toString())
+                    }
                 }
             }
         })
@@ -520,16 +542,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         }
 
         selectedViews.clear()
-//        if (snackBar.isShown) {
-//            snackBar.dismiss()
-//        }
 
-        b.btnAdd.setImageResource(R.drawable.ic_add)
-        b.txtSearch.isEnabled = true
+        /* Make edittext editable again */
+        b.txtSearch.keyListener = EditText(this).keyListener
+
+        b.btnAdd.isVisible = true
+        b.layBottom.isVisible = false
     }
 
     private fun enableSelectionMode() {
         isSelectionModeActivated = true
+
         if (b.navMenu.menu.findItem(R.id.menuAccounts).isChecked) {
             accountAdapter.setShowCheckboxes(true)
         } else if (b.navMenu.menu.findItem(R.id.menuBankCards).isChecked) {
@@ -540,7 +563,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             noteAdapter.setShowCheckboxes(true)
         }
 
-        b.txtSearch.isEnabled = false
+        /* Make edittext not editable */
+        b.txtSearch.keyListener = null
+
+        b.btnAdd.isVisible = false
+        b.layBottom.isVisible = true
     }
 
     private fun addNewSelectedItem(
@@ -548,18 +575,131 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     ) {/* we don't want duplicate items in the list, so first check the list */
         selectedItems.add(item)
         selectedViews.add(checkBox)
+
+        updateEdittextValue()
     }
 
     private fun removeSelectedItem(
         checkBox: MaterialCheckBox, item: Any
     ): Boolean {/* Removes the selected item, if item exist in the list return true else returns false */
+        var result: Boolean
+
         if (selectedItems.contains(item)) {
             selectedItems.remove(item)
             selectedViews.remove(checkBox)
 
-            return true
+            result = true
+        } else {
+            result = false
         }
 
-        return false
+        updateEdittextValue()
+        return result
+    }
+
+    private fun updateEdittextValue() {/* Update edittext text when adding or removing items */
+        if (selectedItems.isEmpty()) {
+            b.txtSearch.text.clear()
+        } else {
+            b.txtSearch.setText("${selectedItems.size} items selected")
+        }
+    }
+
+    private fun convertSelectedItemsToText(): String {
+        val sb = StringBuilder()
+        val firstItem = selectedItems.first()
+
+        /* create text to share text */
+        when (firstItem) {
+            is Account -> {
+                for (account in selectedItems) {
+                    sb.append(account).append(System.lineSeparator()).append(System.lineSeparator())
+                }
+            }
+
+            is BankCard -> {
+                for (bankCard in selectedItems) {
+                    sb.append(bankCard).append(System.lineSeparator()).append(System.lineSeparator())
+                }
+            }
+
+            is Contact -> {
+                for (contact in selectedItems) {
+                    sb.append(contact).append(System.lineSeparator()).append(System.lineSeparator())
+                }
+            }
+
+            is Note -> {
+                for (note in selectedItems) {
+                    sb.append(note).append(System.lineSeparator()).append(System.lineSeparator())
+                }
+            }
+        }
+
+        return sb.toString().trim()
+    }
+
+    private fun shareSelectedItems() {
+        if (selectedItems.isNotEmpty()) {
+            shareText(this, "Share information", convertSelectedItemsToText())
+            disableSelectionMode()
+        }
+    }
+
+    private fun copySelectedItems() {
+        if (selectedItems.isNotEmpty()) {
+            copyTextToClipboard(this, "Copy details", convertSelectedItemsToText())
+            disableSelectionMode()
+        }
+    }
+
+    private fun deleteSelectedItems() {
+        if (selectedItems.isNotEmpty()) {
+            val firstItem = selectedItems.first()
+
+            lifecycleScope.launch {
+                try {
+                    if (Dialogs.ask(
+                            context = this@MainActivity,
+                            icon = R.drawable.ic_delete,
+                            title = "Delete selected items",
+                            message = "You have selected ${selectedItems.size} item(s) from the list.\nAre you sure you want to delete these items?",
+                            yesText = "Delete",
+                            noText = "Cancel"
+                        )
+                    ) {
+                        when (firstItem) {
+                            is Account -> {
+                                for (account in selectedItems) {
+                                    databaseViewModel.deleteAccount(account as Account)
+                                }
+                            }
+
+                            is BankCard -> {
+                                for (bankCard in selectedItems) {
+                                    databaseViewModel.deleteBankCard(bankCard as BankCard)
+                                }
+                            }
+
+                            is Contact -> {
+                                for (contact in selectedItems) {
+                                    databaseViewModel.deleteContact(contact as Contact)
+                                }
+                            }
+
+                            is Note -> {
+                                for (note in selectedItems) {
+                                    databaseViewModel.deleteNote(note as Note)
+                                }
+                            }
+                        }
+
+                        disableSelectionMode()
+                    }
+                } catch (ex: Exception) {
+                    Dialogs.showException(this@MainActivity, ex)
+                }
+            }
+        }
     }
 }
