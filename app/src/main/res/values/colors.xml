@@ -4,12 +4,13 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF3838</color>
     <color name="red2">#CCFE6666</color>
-    <color name="green">#4FFFB0</color>
     <color name="gray">#DEDEDE</color>
     <color name="blue">#3DB5CE</color>
     <color name="cyan">#7AFFE2</color>
     <color name="coral_pink">#F88379</color>
     <color name="gold">#FFD700</color>
+
+    <color name="green">#00ab3f</color>
 
     <color name="theme">#E55451</color>
 
