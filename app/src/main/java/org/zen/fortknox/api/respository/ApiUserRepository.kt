@@ -1,12 +1,17 @@
 package org.zen.fortknox.api.respository
 
+import org.zen.fortknox.api.base.response.ApiResponse
 import org.zen.fortknox.api.service.UserService
 import org.zen.fortknox.api.base.response.CONFLICT
 import org.zen.fortknox.api.base.response.INVALID_REQUEST
 import org.zen.fortknox.api.base.response.NOT_FOUND
+import org.zen.fortknox.api.base.response.OK
 import org.zen.fortknox.api.base.response.SERVER_ERROR
 import org.zen.fortknox.api.entity.ApiUser
 import org.zen.fortknox.tools.AppException
+import org.zen.fortknox.tools.getStackTraceAsString
+import org.zen.fortknox.tools.prepareFilePart
+import java.io.File
 import java.io.IOException
 
 class ApiUserRepository(private val api: UserService) {
@@ -52,7 +57,7 @@ class ApiUserRepository(private val api: UserService) {
                 }
             }
         } catch (e: IOException) {
-            Result.failure(AppException.NetworkException("Check your internet connection", e))
+            Result.failure(AppException.NetworkException("Check your internet connection.\n{${e.getStackTraceAsString()}", e))
         } catch (e: Exception) {
             Result.failure(AppException.UnexpectedException("Something went wrong", e))
         }
