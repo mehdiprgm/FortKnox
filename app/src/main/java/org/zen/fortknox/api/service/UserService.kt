@@ -15,31 +15,24 @@ import retrofit2.http.Path
 interface UserService {
 
     // GET all users
-    @GET("Users")
+    @GET("users")
     suspend fun getAll(): Response<List<ApiUser>>
 
     // GET user by username
-    @GET("Users/{username}")
+    @GET("users/{username}")
     suspend fun get(@Path("username") username: String): Response<ApiUser>
 
     // POST add new user
-    @POST("Users/add")
+    @POST("users/add")
     suspend fun add(@Body user: ApiUser): Response<ApiUser>
 
     // PUT update user by username
-    @PUT("Users/{username}")
+    @PUT("users/{username}")
     suspend fun update(
         @Path("username") username: String, @Body user: ApiUser
     ): Response<ApiUser>
 
     // GET users count
-    @GET("Users/count")
+    @GET("users/count")
     suspend fun count(): Response<ApiResponse<Int>>
-
-    @Multipart
-    @POST("/Users/upload/{fileName}")
-    suspend fun uploadUserImage(
-        @Part file: MultipartBody.Part,
-        @Path("fileName") fileName: String
-    ): Response<ApiResponse<String>>
 }
