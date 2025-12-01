@@ -35,7 +35,7 @@ class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
     private lateinit var b: FragmentRegisterProfileCompleteSetupBinding
 
     /* This will store the URI of the image taken by camera or gallery*/
-    private var imageUri: Uri? = null
+    var imageUri: Uri? = null
 
     companion object {
         fun newInstance() = RegisterProfileCompleteSetupFragment()
@@ -285,7 +285,7 @@ class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
 
 
     fun isFormInformationValid(): Boolean {
-        var score = 2
+        var score = 3
 
         score += b.txtLaySecurityCode.validateData(
             b.txtSecurityCode.text.toString().isEmpty(), "Security code is empty"
@@ -295,7 +295,11 @@ class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
             b.txtEmailAddress.text.toString().isEmpty(), "Email address is empty"
         )
 
-        return score == 2
+        if (imageUri == null) {
+            score--
+        }
+
+        return score == 3
     }
 
     fun getUser(): ApiUser {
