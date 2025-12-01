@@ -19,20 +19,4 @@ data class ApiUser(
     var isLocked: Boolean,
     var isRoot: Boolean,
     var createDate: String
-) : Parcelable {
-    companion object {
-        @JvmStatic
-        fun convertUserToJson(apiUser: ApiUser): String {
-            return Gson().toJson(apiUser)
-        }
-
-        @JvmStatic
-        fun convertJsonToUser(userJson: String): ApiUser {
-            val type = object : TypeToken<ApiUser>() {}.type
-            val userObject = Gson().fromJson<ApiUser>(userJson, type)
-
-            return userObject
-        }
-    }
-
-}
+) : Parcelable
