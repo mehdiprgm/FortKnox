@@ -2,11 +2,15 @@ package org.zen.fortknox.tools
 
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import android.provider.OpenableColumns
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.io.copyTo
 
 fun uriToFile(context: Context, uri: Uri, fileName: String? = null): File? {
@@ -51,4 +55,21 @@ private fun getFileNameFromUri(contentResolver: android.content.ContentResolver,
         }
     }
     return name
+}
+
+/* Create a temporary file to store the camera image */
+fun createImageFile(context: Context): File {
+    // Create unique filename using timestamp
+    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+    val fileName = "JPEG_${timeStamp}_"
+
+    // Get the Pictures directory
+    val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+    // Create temporary file
+    return File.createTempFile(
+        fileName,  // prefix
+        ".jpg",    // suffix
+        storageDir // directory
+    )
 }
