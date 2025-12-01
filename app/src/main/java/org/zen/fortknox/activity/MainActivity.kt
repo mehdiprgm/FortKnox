@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -19,9 +20,12 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.launch
 import org.zen.fortknox.R
 import org.zen.fortknox.activity.application.SettingsActivity
@@ -67,8 +71,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var contactAdapter: ContactAdapter
     private lateinit var noteAdapter: NoteAdapter
 
+    /* If selection mode is activated */
     private var isSelectionModeActivated = false
+
+    /* Seconds before user click back button */
     private var backPressedTime = 0L
+
+    /* User profile imageview */
+    private lateinit var imgProfile: CircleImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +112,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
         /* Allow taking screenshots */
         setScreenshotStatus(getSettings().allowScreenshot)
+        loadProfilePicture(imgProfile)
     }
 
     override fun onClick(view: View?) {
@@ -211,6 +222,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             /* Read username from preferences *//* Get user from database using username from preferences */
             val username = pref.getString("Username", "")
             val user = databaseViewModel.getUser(username!!)
+
+            imgProfile = view.findViewById(R.id.imgProfile)
 
             val tvUsername = view.findViewById<TextView>(R.id.tvUsername)
             val tvEmailAddress = view.findViewById<TextView>(R.id.tvEmailAddress)
@@ -504,6 +517,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         }
     }
 
+    private fun loadProfilePicture(imageView: ImageView) {
+        lifecycleScope.launch {
+            try {
+                val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
+                val username = pref.getString("Username", "")
+
+                val user = databaseViewModel.getUser(username!!)
+
+                Glide.with(this@MainActivity).load(user!!.imagePath).skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).placeholder(R.drawable.ic_avatar)
+                    .error(R.drawable.ic_avatar).into(imageView)
+            } catch (ex: Exception) {
+                Dialogs.showException(this@MainActivity, ex)
+            } finally {
+            }
+        }
+    }
+
     private fun showEmptyList(visible: Boolean) {
         val animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
         animation.duration = 600
@@ -525,6 +556,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
     private fun disableSelectionMode() {
         isSelectionModeActivated = false
+        b.txtSearch.isEnabled = true
 
         if (b.navMenu.menu.findItem(R.id.menuAccounts).isChecked) {
             accountAdapter.setShowCheckboxes(false)
@@ -543,15 +575,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
         selectedViews.clear()
 
-        /* Make edittext editable again */
-        b.txtSearch.keyListener = EditText(this).keyListener
-
         b.btnAdd.isVisible = true
         b.layBottom.isVisible = false
     }
 
     private fun enableSelectionMode() {
         isSelectionModeActivated = true
+        b.txtSearch.isEnabled = false
 
         if (b.navMenu.menu.findItem(R.id.menuAccounts).isChecked) {
             accountAdapter.setShowCheckboxes(true)
@@ -563,9 +593,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             noteAdapter.setShowCheckboxes(true)
         }
 
-        /* Make edittext not editable */
-        b.txtSearch.keyListener = null
-
         b.btnAdd.isVisible = false
         b.layBottom.isVisible = true
     }
@@ -575,8 +602,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     ) {/* we don't want duplicate items in the list, so first check the list */
         selectedItems.add(item)
         selectedViews.add(checkBox)
-
-        updateEdittextValue()
     }
 
     private fun removeSelectedItem(
@@ -593,16 +618,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
             result = false
         }
 
-        updateEdittextValue()
         return result
-    }
-
-    private fun updateEdittextValue() {/* Update edittext text when adding or removing items */
-        if (selectedItems.isEmpty()) {
-            b.txtSearch.text.clear()
-        } else {
-            b.txtSearch.setText("${selectedItems.size} items selected")
-        }
     }
 
     private fun convertSelectedItemsToText(): String {
@@ -619,7 +635,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
             is BankCard -> {
                 for (bankCard in selectedItems) {
-                    sb.append(bankCard).append(System.lineSeparator()).append(System.lineSeparator())
+                    sb.append(bankCard).append(System.lineSeparator())
+                        .append(System.lineSeparator())
                 }
             }
 
