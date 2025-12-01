@@ -5,7 +5,11 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputLayout
+import org.zen.fortknox.R
+import kotlin.math.max
 import kotlin.text.isEmpty
 import kotlin.text.replace
 import kotlin.toString
@@ -85,6 +89,34 @@ fun EditText.validateRealTime(
             } else {
                 textInputLayout.isErrorEnabled = false
                 textInputLayout.error = null
+            }
+        }
+    })
+}
+
+fun EditText.showLimiter(textView: TextView, maxChars: Int, isChangingColors: Boolean = true) {
+    val editText = this
+
+    editText.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            val currentTextLength = s.toString().length
+            textView.text = "$currentTextLength / $maxChars"
+
+            /* Nothing entered, make textview invisible */
+            textView.isVisible = currentTextLength!= 0
+
+            if (isChangingColors) {
+                if (currentTextLength == maxChars) {
+                    textView.setTextColor(ContextCompat.getColor(context, R.color.green))
+                } else {
+                    textView.setTextColor(ContextCompat.getColor(context, R.color.red))
+                }
             }
         }
     })
