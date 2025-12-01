@@ -22,7 +22,7 @@
                 android:id="@+id/layTop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/layout_background_borderless"
+                android:background="@drawable/search_layout_background"
                 android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -32,7 +32,8 @@
                 <ImageView
                     android:id="@+id/imgAppIcon"
                     android:layout_width="0dp"
-                    android:layout_height="32dp"
+                    android:layout_height="26dp"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="0.15"
                     android:contentDescription="@null"
                     android:src="@drawable/ic_menu"
@@ -47,6 +48,7 @@
                     android:layout_weight="0.9"
                     android:background="@drawable/edittext_search"
                     android:drawableEnd="@drawable/ic_search"
+                    android:layout_marginEnd="10dp"
                     android:drawablePadding="15dp"
                     android:hint="Search"
                     android:inputType="text"
@@ -59,7 +61,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvTitle"
                     tools:ignore="HardcodedText" />
-
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
