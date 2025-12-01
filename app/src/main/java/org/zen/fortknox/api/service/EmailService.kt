@@ -9,6 +9,6 @@ import retrofit2.http.POST
 
 interface EmailService {
     /* Send verification code to email */
-    @POST("Email/sendCode")
+    @POST("email/sendCode")
     suspend fun send(@Body email: ApiEmail): Response<ApiResponse<ApiEmail>>
 }
