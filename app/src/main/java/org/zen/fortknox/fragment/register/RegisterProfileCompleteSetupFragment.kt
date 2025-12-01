@@ -24,6 +24,8 @@ import org.zen.fortknox.api.entity.ApiUser
 import org.zen.fortknox.databinding.FragmentRegisterProfileCompleteSetupBinding
 import org.zen.fortknox.dialog.DialogType
 import org.zen.fortknox.dialog.Dialogs
+import org.zen.fortknox.tools.createImageFile
+import org.zen.fortknox.tools.showLimiter
 import org.zen.fortknox.tools.validateData
 import java.io.File
 import java.io.IOException
@@ -111,6 +113,7 @@ class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupTextLimiters()
         b.imgProfile.setOnClickListener(this)
     }
 
@@ -207,7 +210,7 @@ class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
     private fun openCamera() {
         lifecycleScope.launch {
             // Create a file to store the camera image
-            val photoFile = createImageFile()
+            val photoFile = createImageFile(requireContext())
 
             // Get a URI for the file using FileProvider (required for Android 7+)
             val photoUri: Uri = FileProvider.getUriForFile(
@@ -237,23 +240,6 @@ class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    /* Create a temporary file to store the camera image */
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        // Create unique filename using timestamp
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val fileName = "JPEG_${timeStamp}_"
-
-        // Get the Pictures directory
-        val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        // Create temporary file
-        return File.createTempFile(
-            fileName,  // prefix
-            ".jpg",    // suffix
-            storageDir // directory
-        )
-    }
 
     private fun showImagePopupMenu(view: View) {
         val popupMenu = PopupMenu(requireContext(), view)
@@ -261,28 +247,25 @@ class RegisterProfileCompleteSetupFragment : Fragment(), View.OnClickListener {
 
         popupMenu.menuInflater.inflate(R.menu.menu_image, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { menuItem ->
-            handleMenuItemClick(menuItem)
+            when(menuItem.itemId) {
+                R.id.menuCamera -> {
+                    checkCameraPermission()
+                }
+
+                R.id.menuGallery -> {
+                    checkGalleryPermission()
+                }
+            }
+
+            true
         }
 
         popupMenu.show()
     }
 
-    private fun handleMenuItemClick(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            R.id.menuCamera -> {
-                checkCameraPermission()
-                true
-            }
-
-            R.id.menuGallery -> {
-                checkGalleryPermission()
-                true
-            }
-
-            else -> false
-        }
+    private fun setupTextLimiters() {
+        b.txtSecurityCode.showLimiter(textView = b.tvSecurityCodeLimiter, maxChars = 4)
     }
-
 
     fun isFormInformationValid(): Boolean {
         var score = 3

@@ -6,7 +6,7 @@
     style="@style/ScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.database.AccountActivity">
+    tools:context=".activity.database.ContactActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -110,6 +110,17 @@
                     app:layout_constraintStart_toStartOf="@+id/tvName"
                     app:layout_constraintTop_toBottomOf="@+id/txtLayName"
                     tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/tvPhoneNumberLimiter"
+                    style="@style/TextSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 / 0"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvPhoneNumber"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvPhoneNumber" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/txtLayPhoneNumber"

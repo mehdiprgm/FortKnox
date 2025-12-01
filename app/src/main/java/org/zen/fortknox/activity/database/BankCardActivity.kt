@@ -19,6 +19,7 @@ import org.zen.fortknox.tools.getAllViews
 import org.zen.fortknox.tools.getDate
 import org.zen.fortknox.tools.getSettings
 import org.zen.fortknox.tools.setScreenshotStatus
+import org.zen.fortknox.tools.showLimiter
 import org.zen.fortknox.tools.validateData
 import org.zen.fortknox.viewmodel.DatabaseViewModel
 import org.zendev.keepergen.tools.formatting.CreditCardNumberFormattingTextWatcher
@@ -44,6 +45,7 @@ class BankCardActivity : AppCompatActivity(), View.OnClickListener {
 
         setupBackPressListener()
         setupTextFormatters()
+        setupTextLimiters()
 
         b.btnClose.setOnClickListener(this)
         b.btnFinish.setOnClickListener(this)
@@ -57,7 +59,7 @@ class BankCardActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
-        when(view?.id) {
+        when (view?.id) {
             R.id.btnClose -> {
                 checkTheInformation()
             }
@@ -90,6 +92,11 @@ class BankCardActivity : AppCompatActivity(), View.OnClickListener {
 
         b.txtCardNumber.addTextChangedListener(creditCardFormatter)
         b.txtExpireDate.addTextChangedListener(dateFormatter)
+    }
+
+    private fun setupTextLimiters() {
+        b.txtCardNumber.showLimiter(textView = b.tvCardNumberLimiter, maxChars = 19)
+        b.txtCvv2.showLimiter(textView = b.tvCvv2Limiter, maxChars = 4)
     }
 
     private fun isFormInformationChanged(): Boolean {/* For update scenario, it should check all the information and compare to original *//* If anything changed it means, it has to give warning, otherwise it's good and can exit *//* For create scenario, all it needs is to check all the field for inputs *//* If any information entered, it will give warning to the user */
@@ -252,7 +259,7 @@ class BankCardActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private suspend fun isBankCardExists(cardName: String) : Boolean {
+    private suspend fun isBankCardExists(cardName: String): Boolean {
         return try {
             val bankCard = databaseViewModel.getBankCard(cardName)
             bankCard != null

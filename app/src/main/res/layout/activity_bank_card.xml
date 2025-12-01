@@ -111,6 +111,17 @@
                     app:layout_constraintTop_toBottomOf="@+id/txtLayName"
                     tools:ignore="HardcodedText" />
 
+                <TextView
+                    android:id="@+id/tvCardNumberLimiter"
+                    style="@style/TextSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 / 0"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvCardNumber"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvCardNumber" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/txtLayCardNumber"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -185,6 +196,17 @@
                     app:layout_constraintTop_toBottomOf="@+id/txtLayPassword"
                     tools:ignore="HardcodedText" />
 
+                <TextView
+                    android:id="@+id/tvCvv2Limiter"
+                    style="@style/TextSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 / 0"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvCvv2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvCvv2" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/txtLayCvv2"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -204,8 +226,8 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/edittext_state_panel_background"
                         android:hint="1421"
-                        android:maxLength="4"
                         android:inputType="numberSigned"
+                        android:maxLength="4"
                         android:singleLine="true"
                         tools:ignore="HardcodedText" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -242,8 +264,8 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/edittext_state_panel_background"
                         android:hint="YY / MM"
-                        android:maxLength="7"
                         android:inputType="numberSigned"
+                        android:maxLength="7"
                         android:singleLine="true"
                         tools:ignore="HardcodedText" />
                 </com.google.android.material.textfield.TextInputLayout>

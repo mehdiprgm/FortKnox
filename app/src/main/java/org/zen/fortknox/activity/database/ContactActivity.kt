@@ -23,6 +23,7 @@ import org.zen.fortknox.tools.getAllViews
 import org.zen.fortknox.tools.getDate
 import org.zen.fortknox.tools.getSettings
 import org.zen.fortknox.tools.setScreenshotStatus
+import org.zen.fortknox.tools.showLimiter
 import org.zen.fortknox.tools.validateData
 import org.zen.fortknox.viewmodel.DatabaseViewModel
 import org.zendev.keepergen.tools.formatting.CreditCardNumberFormattingTextWatcher
@@ -48,6 +49,7 @@ class ContactActivity : AppCompatActivity(), View.OnClickListener {
 
         setupBackPressListener()
         setupTextFormatters()
+        setupTextLimiters()
 
         b.btnClose.setOnClickListener(this)
         b.btnFinish.setOnClickListener(this)
@@ -90,6 +92,10 @@ class ContactActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setupTextFormatters() {
         b.txtPhoneNumber.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+    }
+
+    private fun setupTextLimiters() {
+        b.txtPhoneNumber.showLimiter(textView = b.tvPhoneNumberLimiter, maxChars = 15)
     }
 
     private fun isFormInformationChanged(): Boolean {/* For update scenario, it should check all the information and compare to original *//* If anything changed it means, it has to give warning, otherwise it's good and can exit *//* For create scenario, all it needs is to check all the field for inputs *//* If any information entered, it will give warning to the user */

@@ -10,6 +10,7 @@ import org.zen.fortknox.api.entity.ApiUser
 import org.zen.fortknox.databinding.FragmentRegisterProfileBasicInformationBinding
 import org.zen.fortknox.tools.formatting.PhoneNumberFormattingTextWatcher
 import org.zen.fortknox.tools.getDate
+import org.zen.fortknox.tools.showLimiter
 import org.zen.fortknox.tools.validateData
 
 class RegisterProfileBasicInformationFragment : Fragment() {
@@ -29,11 +30,17 @@ class RegisterProfileBasicInformationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupTextFormatters()
+        setupTextLimiters()
     }
 
     private fun setupTextFormatters() {
         b.txtPhoneNumber.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+    }
+
+    private fun setupTextLimiters() {
+        b.txtPhoneNumber.showLimiter(textView = b.tvPhoneNumberLimiter, maxChars = 15)
     }
 
     fun isFormInformationValid(): Boolean {
