@@ -1,5 +1,6 @@
 package org.zen.fortknox.activity.user.register
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -19,14 +20,15 @@ import org.zen.fortknox.fragment.register.RegisterProfileBasicInformationFragmen
 import org.zen.fortknox.fragment.register.RegisterProfileCompleteSetupFragment
 import org.zen.fortknox.tools.disableScreenPadding
 import org.zen.fortknox.tools.isInternetConnected
+import org.zen.fortknox.tools.uriToFile
 import org.zen.fortknox.viewmodel.ApiViewModel
 import org.zen.fortknox.viewmodel.DatabaseViewModel
+import java.util.UUID
 
 class RegisterProfileActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var b: ActivityRegisterProfileBinding
     private lateinit var viewPagerAdapter: RegisterProfileAdapter
 
-    /* Initialize newUser with default values to avoid lateinit issues */
     private var newUser: ApiUser? = null
 
     private lateinit var apiViewModel: ApiViewModel
@@ -52,7 +54,28 @@ class RegisterProfileActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.btnNext -> {
-                createNewUser()
+                val fragment = viewPagerAdapter.getFragment(this, currentFragmentIndex)
+
+                if (fragment is RegisterProfileBasicInformationFragment) {
+                    if (fragment.isFormInformationValid()) {
+                        newUser = fragment.getUser() /* Initialize new user */
+                        goToNextFragment()
+                    }
+                } else if (fragment is RegisterProfileCompleteSetupFragment) {
+                    if (fragment.isFormInformationValid()) {/* Complete the user information */
+
+                        if (isInternetConnected(this)) {
+                            // بررسی کنید که imageUri قابل Null نیست، زیرا قبلاً isFormInformationValid بررسی شده است
+                            fragment.imageUri?.let { uri ->
+                                createNewUser(fragment.getUser(), uri)
+                            }
+                        } else {
+                            lifecycleScope.launch {
+                                Dialogs.showNoInternetConnection(this@RegisterProfileActivity)
+                            }
+                        }
+                    }
+                }
             }
 
             R.id.btnBack -> {
@@ -126,93 +149,160 @@ class RegisterProfileActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private suspend fun isUserCreatedSuccessfully(): Boolean {
+    /**
+     * Attempts to create the user and returns the ApiUser object received from the server (which includes the ID).
+     * This function calls the server endpoint /users/add.
+     */
+    private suspend fun addNewUserToDatabase(user: ApiUser): Result<ApiUser> {
         return try {
-            val response = apiViewModel.addUser(newUser!!)
-            response.isSuccess
+            apiViewModel.addUser(user)
         } catch (ex: Exception) {
             ex.printStackTrace()
-            false
+            Result.failure(ex)
         }
     }
 
-    private fun createNewUser() {
-        val fragment = viewPagerAdapter.getFragment(this, currentFragmentIndex)
+    private fun assembleUser(apiUser: ApiUser): ApiUser {/* Assemble the new user object */
+        val user = newUser?.copy(
+            securityCode = apiUser.securityCode,
+            emailAddress = apiUser.emailAddress,
+            is2FAActivated = apiUser.is2FAActivated,
+            imagePath = "null"
+        )
 
-        if (fragment is RegisterProfileBasicInformationFragment) {
-            if (fragment.isFormInformationValid()) {
-                newUser = fragment.getUser() // This initializes newUser
-                goToNextFragment()
-            }
-        } else if (fragment is RegisterProfileCompleteSetupFragment) {
-            if (fragment.isFormInformationValid()) {/* Complete the user information */
-                if (isInternetConnected(this)) {
-                    val loadingDialog = Dialogs.load(
-                        this, "Completing setup", "Please wait until we create new account"
-                    )
+        return user!!
+    }
 
-                    loadingDialog.show()
-                    lifecycleScope.launch {
-                        try {
-                            val tmpUser = fragment.getUser()
+    private fun createNewUser(apiUser: ApiUser, imageUri: Uri) {
+        val loadingDialog = Dialogs.load(
+            this, "Completing setup", "Please wait until we create new account"
+        )
 
-                            /* Use safe calls since newUser is nullable and assemble the user */
-                            newUser = newUser?.copy(
-                                securityCode = tmpUser.securityCode,
-                                emailAddress = tmpUser.emailAddress,
-                                is2FAActivated = tmpUser.is2FAActivated,
-                                imagePath = "null"
-                            )
+        loadingDialog.show()
+        lifecycleScope.launch {
+            try {/* Assemble the new user object */
+                val userToCreate = assembleUser(apiUser)
 
-                            /* Send request to check if user exists in database or not */
-                            val requestResult = apiViewModel.getUser(newUser!!.username)
+                /* Check to see if user exists */
+                val checkUserResult = apiViewModel.getUser(userToCreate.username)
 
-                            requestResult.onSuccess { user ->
-                                loadingDialog.dismiss()
+                checkUserResult.onSuccess { existingUser ->
+                    if (existingUser.username == userToCreate.username) {
+                        loadingDialog.dismiss()
 
-                                /* User found in the database, so show the message to select another username */
-                                if (user.username == newUser!!.username) {
+                        Dialogs.showMessage(
+                            this@RegisterProfileActivity,
+                            "Username exists",
+                            "This username is already taken by another person",
+                            DialogType.Error
+                        )
+                    } else {/* Add user to the database */
+                        val createUserResult = addNewUserToDatabase(userToCreate)
+                        createUserResult.onSuccess { createdUser ->
+                            /* Get the new user (userId) */
+                            val newUserId = createdUser.id
+
+                            /* Let function makes sure user created and value is not null */
+                            val imageFinalName = newUserId?.let {
+                                if (it > 0) {/* User image file name */
+                                    "$newUserId.png"
+                                } else {
+                                    loadingDialog.dismiss()
+
                                     Dialogs.showMessage(
                                         this@RegisterProfileActivity,
-                                        "Username exists",
-                                        "This username is already taken by another person",
+                                        "Setup Failed",
+                                        "Failed to receive a valid User ID after creation.",
                                         DialogType.Error
                                     )
-                                } else {
-                                    if (isUserCreatedSuccessfully()) {
-                                        withContext(Dispatchers.Main) {
-                                            Dialogs.showNewProfileCreated(
-                                                this@RegisterProfileActivity, newUser!!.username
-                                            )
-                                            finish()
-                                        }
-                                    } else {
-                                        Dialogs.showMessage(
-                                            this@RegisterProfileActivity,
-                                            "Setup Failed",
-                                            "Failed to create user profile. Please try again.",
-                                            DialogType.Error
-                                        )
-                                    }
+
+                                    return@onSuccess
                                 }
                             }
 
-                            /* Show errors */
-                            requestResult.onFailure { ex ->
-                                Dialogs.showException(
-                                    this@RegisterProfileActivity, ex as Exception
+                            /* Convert uri to the file */
+                            val imageFile = withContext(Dispatchers.IO) {
+                                /* Create temp image file */
+                                uriToFile(
+                                    this@RegisterProfileActivity,
+                                    imageUri,
+                                    UUID.randomUUID().toString() + ".png"
                                 )
                             }
-                        } catch (ex: Exception) {
+                            if (imageFile != null) {
+                                try {/* Upload file into server using user (userId) */
+                                    val uploadImageResult = apiViewModel.uploadImage(
+                                        imageFile, imageFinalName.toString()
+                                    )
+
+                                    uploadImageResult.onSuccess { result ->
+                                        /* Get the image url from server */
+                                        createdUser.imagePath = result.data
+
+                                        /* Update user imagePath */
+                                        val updateUserResult = apiViewModel.updateUser(
+                                            createdUser.username, createdUser
+                                        )
+
+                                        updateUserResult.onSuccess {
+                                            withContext(Dispatchers.Main) {
+                                                /* Everything is ok, close activity */
+                                                loadingDialog.dismiss()
+
+                                                Dialogs.showNewProfileCreated(
+                                                    this@RegisterProfileActivity,
+                                                    userToCreate.username
+                                                )
+
+                                                finish()
+                                            }
+                                        }
+
+                                        updateUserResult.onFailure { ex ->
+                                            loadingDialog.dismiss()
+                                            Dialogs.showException(
+                                                this@RegisterProfileActivity, ex as Exception
+                                            )
+                                        }
+                                    }
+
+                                    uploadImageResult.onFailure { ex ->
+                                        loadingDialog.dismiss()
+
+                                        Dialogs.showException(
+                                            this@RegisterProfileActivity, ex as Exception
+                                        )
+                                    }
+                                } finally {/* Delete temp file */
+                                    imageFile.delete()
+                                }
+                            } else {
+                                loadingDialog.dismiss()
+
+                                Dialogs.showMessage(
+                                    this@RegisterProfileActivity,
+                                    "Setup Failed",
+                                    "Could not process image file.",
+                                    DialogType.Error
+                                )
+                            }
+                        }
+
+                        createUserResult.onFailure { ex ->
                             loadingDialog.dismiss()
-                            Dialogs.showException(this@RegisterProfileActivity, ex)
+                            Dialogs.showException(this@RegisterProfileActivity, ex as Exception)
                         }
                     }
-                } else {
-                    lifecycleScope.launch {
-                        Dialogs.showNoInternetConnection(this@RegisterProfileActivity)
-                    }
                 }
+
+                /* Show errors for Check User (Step 1 failure) */
+                checkUserResult.onFailure { ex ->
+                    loadingDialog.dismiss()
+                    Dialogs.showException(this@RegisterProfileActivity, ex as Exception)
+                }
+            } catch (ex: Exception) {
+                loadingDialog.dismiss()
+                Dialogs.showException(this@RegisterProfileActivity, ex)
             }
         }
     }
