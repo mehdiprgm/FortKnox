@@ -94,6 +94,14 @@ dependencies {
     // Android Security (for secure key storage in Keystore)
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
+    val glideVersion = "4.16.0"
+
+    // Core dependency for Glide
+    implementation("com.github.bumptech.glide:glide:$glideVersion")
+
+    // Annotation processor for Glide (required for using @GlideModule)
+    kapt("com.github.bumptech.glide:compiler:$glideVersion")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
