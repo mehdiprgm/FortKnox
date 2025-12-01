@@ -30,7 +30,7 @@
                 <item
                     android:id="@+id/menuAccounts"
                     android:checkable="true"
-                    android:icon="@drawable/ic_internet"
+                    android:icon="@drawable/ic_earth2"
                     android:title="Accounts"
                     tools:ignore="HardcodedText" />
 
