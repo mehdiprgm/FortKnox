@@ -41,8 +41,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener,
         initViewModels()
         loadSettings()
 
-        b.btnClose.setOnClickListener(this)
-
         b.layTheme.setOnClickListener(this)
         b.layPasscode.setOnClickListener(this)
         b.layLockTimeout.setOnClickListener(this)
@@ -55,10 +53,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener,
 
     override fun onClick(view: View?) {
         when (view?.id) {
-            R.id.btnClose -> {
-                finish()
-            }
-
             R.id.layTheme -> {
                 lifecycleScope.launch {
                     val selectedTheme = Dialogs.selectTheme(this@SettingsActivity, settings.theme)
@@ -88,8 +82,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener,
 
                     //change passcode here
                     if (passcode.isNotEmpty()) {
-                        if (passcode.length == 4) {
-                            /* Read username from preferences */
+                        if (passcode.length == 4) {/* Read username from preferences */
                             val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
                             val username = pref.getString("Username", "")
 
@@ -101,7 +94,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener,
                             databaseViewModel.updateUser(user)
                         } else {
                             Dialogs.showMessage(
-                                this@SettingsActivity, "Invalid passcode", "The passcode must be 4 digit number.",
+                                this@SettingsActivity,
+                                "Invalid passcode",
+                                "The passcode must be 4 digit number.",
                                 DialogType.Error
                             )
                         }
@@ -123,22 +118,31 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener,
                 }
             }
 
-            R.id.layScreenshot -> {
-                /* Only the check status change */
-                /* The check change listener in this activity will handle the rest of it */
+            R.id.layScreenshot -> {/* Only the check status change *//* The check change listener in this activity will handle the rest of it */
                 b.switchAllowScreenshots.isChecked = !b.switchAllowScreenshots.isChecked
             }
 
             R.id.layReportBug -> {
-                val intent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = "mailto:mfcrisis2016@gmail.com?subject=Report bug".toUri()
-                }
+                lifecycleScope.launch {
+                    if (Dialogs.ask(
+                            context = this@SettingsActivity,
+                            title = "Open Gmail",
+                            message = "You can report bug with gmail application.\nAre you sure you want to continue?",
+                            icon = R.drawable.ic_email,
+                            cancellable = true
+                        )
+                    ) {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = "mailto:mfcrisis2016@gmail.com?subject=Report bug".toUri()
+                        }
 
-                /* Optional: restrict to Gmail app if installed */
-                intent.setPackage("com.google.android.gm")
+                        /* Optional: restrict to Gmail app if installed */
+                        intent.setPackage("com.google.android.gm")
 
-                if (intent.resolveActivity(packageManager) != null) {
-                    startActivity(intent)
+                        if (intent.resolveActivity(packageManager) != null) {
+                            startActivity(intent)
+                        }
+                    }
                 }
             }
         }
@@ -146,8 +150,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener,
 
     /* Switch check change listener */
     override fun onCheckedChanged(
-        buttonView: CompoundButton,
-        isChecked: Boolean
+        buttonView: CompoundButton, isChecked: Boolean
     ) {
         when (buttonView.id) {
             R.id.switchAllowScreenshots -> {
@@ -168,6 +171,4 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener,
         b.tvLockTimeoutValue.text = "${settings.lockTimeout} Seconds"
         b.switchAllowScreenshots.isChecked = settings.allowScreenshot
     }
-
-
 }

@@ -10,31 +10,18 @@
     android:padding="10dp"
     tools:context=".activity.application.SettingsActivity">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnClose"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:contentDescription="Search"
-        android:src="@drawable/ic_close"
-        app:backgroundTint="@color/background"
-        app:elevation="0dp"
-        app:fabCustomSize="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:maxImageSize="35dp"
-        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/tvTitle"
-        style="@style/TextBig"
+        style="@style/TextExtraBig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
         android:text="Settings"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/btnClose"
-        app:layout_constraintStart_toEndOf="@+id/btnClose"
-        app:layout_constraintTop_toTopOf="@+id/btnClose"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
     <ScrollView
@@ -44,12 +31,12 @@
         android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnClose">
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/tvDisplay"
