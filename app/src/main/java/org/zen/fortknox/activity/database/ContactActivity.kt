@@ -111,9 +111,14 @@ class ContactActivity : AppCompatActivity(), View.OnClickListener {
 
     /* Iterate over all edittext in the form and get all their text separated by ,*/
     private fun getFormText(): String {
-        return getAllViews(b.layInformation, false).filterIsInstance<TextInputEditText>()
-            .filter { it.text.toString().isNotEmpty() }
-            .joinToString(separator = ",") { it.text.toString() }
+        val allViews = getAllViews(b.layInformation, false).filterIsInstance<TextInputEditText>()
+
+        if (isUpdatingEntity) {
+            return allViews.joinToString(separator = ",") { it.text.toString() }
+        } else {
+            return allViews.filter { it.text.toString().isNotEmpty() }
+                .joinToString(separator = ",") { it.text.toString() }
+        }
     }
 
     /* Check the form information before exits the screen */
