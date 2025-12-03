@@ -30,12 +30,6 @@
                 android:icon="@drawable/ic_settings"
                 android:title="Settings"
                 tools:ignore="HardcodedText" />
-
-            <item
-                android:id="@+id/menuAboutUs"
-                android:icon="@drawable/ic_info"
-                android:title="About Us"
-                tools:ignore="HardcodedText" />
         </menu>
     </item>
 
