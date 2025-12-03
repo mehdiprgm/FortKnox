@@ -364,34 +364,6 @@
                         app:trackTint="@drawable/switch_custom_colors" />
 
                 </LinearLayout>
-
-                <!--                <LinearLayout-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginStart="15dp"-->
-                <!--                    android:orientation="vertical">-->
-
-                <!--                    <com.google.android.material.switchmaterial.SwitchMaterial-->
-                <!--                        android:id="@+id/switchAllowScreenshots"-->
-                <!--                        style="@style/TextNormal"-->
-                <!--                        android:layout_width="match_parent"-->
-                <!--                        android:layout_height="wrap_content"-->
-                <!--                        android:checked="false"-->
-                <!--                        app:switchPadding="0dp"-->
-                <!--                        android:padding="0dp"-->
-                <!--                        android:text="Allow Screenshots"-->
-                <!--                        app:thumbTint="@color/foreground"-->
-                <!--                        app:trackTint="@drawable/switch_custom_colors" />-->
-
-                <!--                    <TextView-->
-                <!--                        style="@style/TextSmall"-->
-                <!--                        android:layout_width="match_parent"-->
-                <!--                        android:layout_height="wrap_content"-->
-                <!--                        android:ellipsize="end"-->
-                <!--                        android:maxLines="1"-->
-                <!--                        android:text="For security reasons you can disable screenshots in pages contains sensitive information"-->
-                <!--                        android:textColor="@color/foreground_less" />-->
-                <!--                </LinearLayout>-->
             </LinearLayout>
 
             <TextView
@@ -403,7 +375,8 @@
                 android:text="Additional"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layScreenshot" />
+                app:layout_constraintTop_toBottomOf="@+id/layScreenshot"
+                tools:ignore="HardcodedText" />
 
             <LinearLayout
                 android:id="@+id/layReportBug"
@@ -475,8 +448,86 @@
                         android:layout_marginStart="20dp"
                         android:drawableEnd="@drawable/ic_arrow_right"
                         android:gravity="end|center"
-                        android:text="Send Report"
+                        android:text=""
                         android:textColor="@color/foreground_less" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layAboutUs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/layout_background_borderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:tooltipText="Information about application and developer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layReportBug">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgAboutUsIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/purple"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_info"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layTheme"
+                    app:shapeAppearance="@style/CircleImageView"
+                    app:tint="@color/black" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvAboutUsKey"
+                            style="@style/TextNormal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="About us"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            style="@style/TextSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Information about application and developer"
+                            android:textColor="@color/foreground_less"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvAboutUsValue"
+                        style="@style/TextSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:drawableEnd="@drawable/ic_arrow_right"
+                        android:gravity="end|center"
+                        android:text=""
+                        android:textColor="@color/foreground_less"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

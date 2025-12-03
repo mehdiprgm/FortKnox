@@ -46,6 +46,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener,
         b.layLockTimeout.setOnClickListener(this)
         b.layScreenshot.setOnClickListener(this)
         b.layReportBug.setOnClickListener(this)
+        b.layAboutUs.setOnClickListener(this)
 
         b.switchAllowScreenshots.setOnClickListener(this)
         b.switchAllowScreenshots.setOnCheckedChangeListener(this)
@@ -144,6 +145,10 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener,
                         }
                     }
                 }
+            }
+
+            R.id.layAboutUs -> {
+                Dialogs.showAboutUs(this)
             }
         }
     }
