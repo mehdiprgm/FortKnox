@@ -1,82 +1,29 @@
 package org.zen.fortknox.activity
 
-import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.MenuItem
+import android.os.PersistableBundle
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.android.material.checkbox.MaterialCheckBox
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
-import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.launch
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.imageview.ShapeableImageView
 import org.zen.fortknox.R
-import org.zen.fortknox.activity.application.SettingsActivity
-import org.zen.fortknox.adapter.interfaces.OnAccountClickListener
-import org.zen.fortknox.adapter.interfaces.OnBankCardClickListener
-import org.zen.fortknox.adapter.interfaces.OnContactClickListener
-import org.zen.fortknox.adapter.interfaces.OnNoteClickListener
-import org.zen.fortknox.adapter.recyclerview.AccountAdapter
-import org.zen.fortknox.adapter.recyclerview.BankCardAdapter
-import org.zen.fortknox.adapter.recyclerview.ContactAdapter
-import org.zen.fortknox.adapter.recyclerview.NoteAdapter
-import org.zen.fortknox.database.entity.Account
-import org.zen.fortknox.database.entity.BankCard
-import org.zen.fortknox.database.entity.Contact
-import org.zen.fortknox.database.entity.Note
+import org.zen.fortknox.adapter.viewpager.ScreenNavigationAdapter
 import org.zen.fortknox.databinding.ActivityMainBinding
-import org.zen.fortknox.dialog.Dialogs
-import org.zen.fortknox.dialog.bottom.BottomDialogNewItem
-import org.zen.fortknox.dialog.bottom.details.AccountDetailsDialog
-import org.zen.fortknox.dialog.bottom.details.BankCardDetailsDialog
-import org.zen.fortknox.dialog.bottom.details.ContactDetailsDialog
-import org.zen.fortknox.dialog.bottom.details.NoteDetailsDialog
-import org.zen.fortknox.tools.applySettings
-import org.zen.fortknox.tools.changeThemeButtonIcon
-import org.zen.fortknox.tools.copyTextToClipboard
 import org.zen.fortknox.tools.disableScreenPadding
+import org.zen.fortknox.tools.getAllViews
+import org.zen.fortknox.tools.getResourceColor
 import org.zen.fortknox.tools.getSettings
-import org.zen.fortknox.tools.preferencesName
-import org.zen.fortknox.tools.selectedItems
-import org.zen.fortknox.tools.selectedViews
 import org.zen.fortknox.tools.setScreenshotStatus
-import org.zen.fortknox.tools.shareText
-import org.zen.fortknox.tools.theme.changeTheme
-import org.zen.fortknox.viewmodel.DatabaseViewModel
 
-class MainActivity : AppCompatActivity(), View.OnClickListener,
-    NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var b: ActivityMainBinding
-    private lateinit var databaseViewModel: DatabaseViewModel
+    private lateinit var viewPagerAdapter: ScreenNavigationAdapter
 
-    private lateinit var accountAdapter: AccountAdapter
-    private lateinit var bankCardAdapter: BankCardAdapter
-    private lateinit var contactAdapter: ContactAdapter
-    private lateinit var noteAdapter: NoteAdapter
-
-    /* If selection mode is activated */
-    private var isSelectionModeActivated = false
-
-    /* Seconds before user click back button */
-    private var backPressedTime = 0L
-
-    /* User profile imageview */
-    private lateinit var imgProfile: CircleImageView
+    private var currentFragmentIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,635 +33,96 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
         setContentView(b.root)
         disableScreenPadding(b.root)
 
-        initViewModels()
-        setupBackPressListener()
-        setupMenuHeader()
-        setupSearchBar()
+        setupViewPager()
 
-        b.imgAppIcon.setOnClickListener(this)
-        b.btnAdd.setOnClickListener(this)
-
-        b.tvShare.setOnClickListener(this)
-        b.tvCopy.setOnClickListener(this)
-        b.tvDelete.setOnClickListener(this)
-
-        /* Set menu item change listener */
-        b.navMenu.setNavigationItemSelectedListener(this)
-
-        /* Default load all accounts */
-        onNavigationItemSelected(b.navMenu.menu.findItem(R.id.menuAccounts))
+        b.layHome.setOnClickListener(this)
+        b.layMonitor.setOnClickListener(this)
+        b.layProfile.setOnClickListener(this)
     }
 
     override fun onResume() {
         super.onResume()
-
-        /* Allow taking screenshots */
         setScreenshotStatus(getSettings().allowScreenshot)
-        loadProfilePicture(imgProfile)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+
+        /* Save the current fragment index, so when activity re-create itself, we can read it and show the right fragment to the user */
+        outState.putInt("CurrentFragmentIndex", currentFragmentIndex)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        /* Get the index and update the UI */
+        currentFragmentIndex = savedInstanceState.getInt("CurrentFragmentIndex")
     }
 
     override fun onClick(view: View?) {
         when (view?.id) {
-            R.id.imgAppIcon -> {
-                if (!b.main.isOpen) {
-                    b.main.openDrawer(GravityCompat.START)
-                }
+            R.id.layHome -> {
+                currentFragmentIndex = 0
             }
 
-            R.id.btnAdd -> {/* Load rotation animation */
-                val rotate180Reverse = AnimationUtils.loadAnimation(this, R.anim.rotate_180_reverse)
-                rotate180Reverse.duration = 300
-
-                /* Load rotation animation in add button */
-                b.btnAdd.startAnimation(rotate180Reverse)
-
-                /* Open bottom dialog for creating new item */
-                val newItemDialog = BottomDialogNewItem()
-                newItemDialog.show(supportFragmentManager, "New Item")
+            R.id.layMonitor -> {
+                currentFragmentIndex = 1
             }
 
-            R.id.tvShare -> {
-                shareSelectedItems()
-            }
-
-            R.id.tvCopy -> {
-                copySelectedItems()
-            }
-
-            R.id.tvDelete -> {
-                deleteSelectedItems()
-            }
-        }
-    }
-
-    override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        when (menuItem.itemId) {
-            R.id.menuAccounts -> {
-                menuItem.isChecked = true
-                loadAccounts()
-            }
-
-            R.id.menuBankCards -> {
-                menuItem.isChecked = true
-                loadBankCards()
-            }
-
-            R.id.menuContacts -> {
-                menuItem.isChecked = true
-                loadContacts()
-            }
-
-            R.id.menuNotes -> {
-                menuItem.isChecked = true
-                loadNotes()
-            }
-
-            R.id.menuSettings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-            }
-
-            R.id.menuAboutUs -> {
-                Dialogs.showAboutUs(this)
+            R.id.layProfile -> {
+                currentFragmentIndex = 2
             }
         }
 
-        /* Prevent multiselection in the menu *//* Otherwise it create a bug */
-        b.navMenu.setCheckedItem(menuItem)
-        b.root.closeDrawer(GravityCompat.START)
-
-        return true
+        b.vpMain.currentItem = currentFragmentIndex
+        updateSelectedItem()
     }
 
-    private fun setupBackPressListener() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (isSelectionModeActivated) {
-                    disableSelectionMode()
-                } else {
-                    val currentTime = System.currentTimeMillis()
-
-                    /* If user press back button again under 3 seconds */
-                    if (currentTime - backPressedTime < 3000) {
-                        finish()
-                    } else {
-                        Toast.makeText(
-                            this@MainActivity, "Press back button again to exit", Toast.LENGTH_SHORT
-                        ).show()
-
-                        /* Close screen and update pressed time to current time */
-                        backPressedTime = currentTime
-                    }
-                }
-            }
+    private fun setupViewPager() {
+        viewPagerAdapter = ScreenNavigationAdapter(this)
+        b.vpMain.apply {
+            adapter = viewPagerAdapter
+            isUserInputEnabled = true
         }
 
-        onBackPressedDispatcher.addCallback(this, callback)
-    }
+        b.vpMain.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
 
-    private fun setupMenuHeader() {
-        try {/* Ge the menu view */
-            val view: View = b.navMenu.getHeaderView(0)
-            val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
-            val settings = getSettings()
-
-            /* Read username from preferences *//* Get user from database using username from preferences */
-            val username = pref.getString("Username", "")
-            val user = databaseViewModel.getUser(username!!)
-
-            imgProfile = view.findViewById(R.id.imgProfile)
-
-            val tvUsername = view.findViewById<TextView>(R.id.tvUsername)
-            val tvEmailAddress = view.findViewById<TextView>(R.id.tvEmailAddress)
-            val btnTheme = view.findViewById<FloatingActionButton>(R.id.btnTheme)
-
-            tvUsername.text = user!!.username
-            tvEmailAddress.text = user.emailAddress
-            changeThemeButtonIcon(btnTheme, settings.theme)
-
-            btnTheme.setOnClickListener {
-                /* Set the next theme */
-                val newTheme = settings.theme.next()
-
-                /* Change button icon */
-                changeThemeButtonIcon(btnTheme, newTheme)
-                changeTheme(newTheme)
-
-                /* Apply new theme to the settings */
-                settings.theme = newTheme
-                applySettings(this)
-            }
-        } catch (ex: Exception) {
-            lifecycleScope.launch {
-                Dialogs.showException(this@MainActivity, ex)
-            }
-        }
-    }
-
-    private fun setupSearchBar() {
-        b.txtSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {/* In the selection mode, we don't want edittext to work */
-                if (!isSelectionModeActivated) {
-                    if (b.navMenu.menu.findItem(R.id.menuAccounts).isChecked) {
-                        loadAccounts(s.toString())
-                    } else if (b.navMenu.menu.findItem(R.id.menuBankCards).isChecked) {
-                        loadBankCards(s.toString())
-                    } else if (b.navMenu.menu.findItem(R.id.menuContacts).isChecked) {
-                        loadContacts(s.toString())
-                    } else if (b.navMenu.menu.findItem(R.id.menuNotes).isChecked) {
-                        loadNotes(s.toString())
-                    }
-                }
+                currentFragmentIndex = position
+                updateSelectedItem()
             }
         })
     }
 
-    private fun initViewModels() {
-        databaseViewModel = ViewModelProvider(this)[DatabaseViewModel::class.java]
-    }
+    private fun updateSelectedItem() {
+        val animation = AnimationUtils.loadAnimation(this, R.anim.pop_in)
+        animation.duration = 300
 
-    private fun loadAccounts(searchQuery: String = "") {
-        try {
-            accountAdapter = AccountAdapter(this)
-            disableSelectionMode()
-
-            /* Setup adapter */
-            b.rcTableContent.adapter = accountAdapter
-            b.rcTableContent.layoutManager = LinearLayoutManager(this)
-
-            if (searchQuery.isEmpty()) {/* Load all items */
-                databaseViewModel.allAccounts.observe(this) { accounts ->
-                    accountAdapter.accounts = accounts
-                    showEmptyList(accounts.isEmpty())
-                }
-            } else {/* Show only found items */
-                databaseViewModel.setAccountSearchQuery(searchQuery)
-                databaseViewModel.accountSearchResults.observe(this) { accounts ->
-                    accountAdapter.accounts = accounts
-                    showEmptyList(accounts.isEmpty())
-                }
+        getAllViews(b.layNavigation, false).filterIsInstance<ShapeableImageView>()
+            .forEach { imageView ->
+                imageView.setBackgroundColor(getResourceColor(this, R.color.panelBackground))
             }
 
-            accountAdapter.setOnItemClickListener(object : OnAccountClickListener {
-                override fun onItemClick(
-                    checkBox: MaterialCheckBox, account: Account
-                ) {
-                    if (isSelectionModeActivated) {
-                        if (removeSelectedItem(checkBox, account)) {
-                            checkBox.isChecked = false
-                        } else {
-                            addNewSelectedItem(checkBox, account)
-                            checkBox.isChecked = true
-                        }
+        when (currentFragmentIndex) {
+            0 -> {
+                b.imgHome.setBackgroundColor(getResourceColor(this, R.color.theme))
+                b.imgHome.startAnimation(animation)
+            }
 
-                        if (selectedItems.isEmpty()) {
-                            disableSelectionMode()
-                        }
-                    } else {
-                        val accountDetailsDialog = AccountDetailsDialog(this@MainActivity, account)
-                        accountDetailsDialog.show(supportFragmentManager, "Account Details")
-                    }
-                }
+            1 -> {
+                b.imgMonitor.setBackgroundColor(getResourceColor(this, R.color.theme))
+                b.imgMonitor.startAnimation(animation)
+            }
 
-                override fun onItemLongClick(checkBox: MaterialCheckBox, account: Account) {
-                    if (!isSelectionModeActivated) {
-                        enableSelectionMode()
-
-                        addNewSelectedItem(checkBox, account)
-                        checkBox.isChecked = true
-                    }
-                }
-            })
-        } catch (ex: Exception) {
-            lifecycleScope.launch {
-                Dialogs.showException(this@MainActivity, ex)
+            2 -> {
+                b.imgProfile.setBackgroundColor(getResourceColor(this, R.color.theme))
+                b.imgProfile.startAnimation(animation)
             }
         }
     }
 
-    private fun loadBankCards(searchQuery: String = "") {
-        try {
-            bankCardAdapter = BankCardAdapter(this)
-            disableSelectionMode()
-
-            /* Setup adapter */
-            b.rcTableContent.adapter = bankCardAdapter
-            b.rcTableContent.layoutManager = LinearLayoutManager(this)
-
-            if (searchQuery.isEmpty()) {/* Load all items */
-                databaseViewModel.allBankCards.observe(this) { bankCards ->
-                    bankCardAdapter.bankCards = bankCards
-                    showEmptyList(bankCards.isEmpty())
-                }
-            } else {/* Show only found items */
-                databaseViewModel.setBankCardSearchQuery(searchQuery)
-                databaseViewModel.bankCardSearchResults.observe(this) { bankCards ->
-                    bankCardAdapter.bankCards = bankCards
-                    showEmptyList(bankCards.isEmpty())
-                }
-            }
-
-            bankCardAdapter.setOnItemClickListener(object : OnBankCardClickListener {
-                override fun onItemClick(
-                    checkBox: MaterialCheckBox, bankCard: BankCard
-                ) {
-                    if (isSelectionModeActivated) {
-                        if (removeSelectedItem(checkBox, bankCard)) {
-                            checkBox.isChecked = false
-                        } else {
-                            addNewSelectedItem(checkBox, bankCard)
-                            checkBox.isChecked = true
-                        }
-
-                        if (selectedItems.isEmpty()) {
-                            disableSelectionMode()
-                        }
-                    } else {
-                        val bankCardDetailsDialog =
-                            BankCardDetailsDialog(this@MainActivity, bankCard)
-                        bankCardDetailsDialog.show(supportFragmentManager, "Bank card Details")
-                    }
-                }
-
-                override fun onItemLongClick(checkBox: MaterialCheckBox, bankCard: BankCard) {
-                    if (!isSelectionModeActivated) {
-                        enableSelectionMode()
-
-                        addNewSelectedItem(checkBox, bankCard)
-                        checkBox.isChecked = true
-                    }
-                }
-            })
-        } catch (ex: Exception) {
-            lifecycleScope.launch {
-                Dialogs.showException(this@MainActivity, ex)
-            }
-        }
-    }
-
-    private fun loadContacts(searchQuery: String = "") {
-        try {
-            contactAdapter = ContactAdapter(this)
-            disableSelectionMode()
-
-            /* Setup adapter */
-            b.rcTableContent.adapter = contactAdapter
-            b.rcTableContent.layoutManager = LinearLayoutManager(this)
-
-            if (searchQuery.isEmpty()) {/* Load all items */
-                databaseViewModel.allContacts.observe(this) { contacts ->
-                    contactAdapter.contacts = contacts
-                    showEmptyList(contacts.isEmpty())
-                }
-            } else {/* Show only found items */
-                databaseViewModel.setContactSearchQuery(searchQuery)
-                databaseViewModel.contactSearchResults.observe(this) { contacts ->
-                    contactAdapter.contacts = contacts
-                    showEmptyList(contacts.isEmpty())
-                }
-            }
-
-            contactAdapter.setOnItemClickListener(object : OnContactClickListener {
-                override fun onItemClick(
-                    checkBox: MaterialCheckBox, contact: Contact
-                ) {
-                    if (isSelectionModeActivated) {
-                        if (removeSelectedItem(checkBox, contact)) {
-                            checkBox.isChecked = false
-                        } else {
-                            addNewSelectedItem(checkBox, contact)
-                            checkBox.isChecked = true
-                        }
-
-                        if (selectedItems.isEmpty()) {
-                            disableSelectionMode()
-                        }
-                    } else {
-                        val contactDetailsDialog = ContactDetailsDialog(this@MainActivity, contact)
-                        contactDetailsDialog.show(supportFragmentManager, "Bank card Details")
-                    }
-                }
-
-                override fun onItemLongClick(checkBox: MaterialCheckBox, contact: Contact) {
-                    if (!isSelectionModeActivated) {
-                        enableSelectionMode()
-
-                        addNewSelectedItem(checkBox, contact)
-                        checkBox.isChecked = true
-                    }
-                }
-            })
-        } catch (ex: Exception) {
-            lifecycleScope.launch {
-                Dialogs.showException(this@MainActivity, ex)
-            }
-        }
-    }
-
-    private fun loadNotes(searchQuery: String = "") {
-        try {
-            noteAdapter = NoteAdapter(this)
-            disableSelectionMode()
-
-            /* Setup adapter */
-            b.rcTableContent.adapter = noteAdapter
-            b.rcTableContent.layoutManager = LinearLayoutManager(this)
-
-            if (searchQuery.isEmpty()) {/* Load all items */
-                databaseViewModel.allNotes.observe(this) { notes ->
-                    noteAdapter.notes = notes
-                    showEmptyList(notes.isEmpty())
-                }
-            } else {/* Show only found items */
-                databaseViewModel.setNoteSearchQuery(searchQuery)
-                databaseViewModel.noteSearchResults.observe(this) { notes ->
-                    noteAdapter.notes = notes
-                    showEmptyList(notes.isEmpty())
-                }
-            }
-
-            noteAdapter.setOnItemClickListener(object : OnNoteClickListener {
-                override fun onItemClick(
-                    checkBox: MaterialCheckBox, note: Note
-                ) {
-                    if (isSelectionModeActivated) {
-                        if (removeSelectedItem(checkBox, note)) {
-                            checkBox.isChecked = false
-                        } else {
-                            addNewSelectedItem(checkBox, note)
-                            checkBox.isChecked = true
-                        }
-
-                        if (selectedItems.isEmpty()) {
-                            disableSelectionMode()
-                        }
-                    } else {
-                        val noteDetailsDialog = NoteDetailsDialog(this@MainActivity, note)
-                        noteDetailsDialog.show(supportFragmentManager, "Note Details")
-                    }
-                }
-
-                override fun onItemLongClick(checkBox: MaterialCheckBox, note: Note) {
-                    if (!isSelectionModeActivated) {
-                        enableSelectionMode()
-
-                        addNewSelectedItem(checkBox, note)
-                        checkBox.isChecked = true
-                    }
-                }
-            })
-        } catch (ex: Exception) {
-            lifecycleScope.launch {
-                Dialogs.showException(this@MainActivity, ex)
-            }
-        }
-    }
-
-    private fun loadProfilePicture(imageView: ImageView) {
-        lifecycleScope.launch {
-            try {
-                val pref = getSharedPreferences(preferencesName, MODE_PRIVATE)
-                val username = pref.getString("Username", "")
-
-                val user = databaseViewModel.getUser(username!!)
-
-                Glide.with(this@MainActivity).load(user!!.imagePath).skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).placeholder(R.drawable.ic_avatar)
-                    .error(R.drawable.ic_avatar).into(imageView)
-            } catch (ex: Exception) {
-                Dialogs.showException(this@MainActivity, ex)
-            } finally {
-            }
-        }
-    }
-
-    private fun showEmptyList(visible: Boolean) {
-        val animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
-        animation.duration = 600
-
-        b.lottieEmpty.isVisible = visible
-        b.tvEmpty.isVisible = visible
-        b.tvEmptyDescription.isVisible = visible
-
-        if (visible) {
-            b.lottieEmpty.animation = animation
-            b.tvEmpty.animation = animation
-            b.tvEmptyDescription.animation = animation
-        } else {
-            b.lottieEmpty.animation = null
-            b.tvEmpty.animation = null
-            b.tvEmptyDescription.animation = null
-        }
-    }
-
-    private fun disableSelectionMode() {
-        isSelectionModeActivated = false
-        b.txtSearch.isEnabled = true
-
-        if (b.navMenu.menu.findItem(R.id.menuAccounts).isChecked) {
-            accountAdapter.setShowCheckboxes(false)
-        } else if (b.navMenu.menu.findItem(R.id.menuBankCards).isChecked) {
-            bankCardAdapter.setShowCheckboxes(false)
-        } else if (b.navMenu.menu.findItem(R.id.menuContacts).isChecked) {
-            contactAdapter.setShowCheckboxes(false)
-        } else if (b.navMenu.menu.findItem(R.id.menuNotes).isChecked) {
-            noteAdapter.setShowCheckboxes(false)
-        }
-
-        selectedItems.clear()
-        for (item in selectedViews) {
-            item.isChecked = false
-        }
-
-        selectedViews.clear()
-
-        b.btnAdd.isVisible = true
-        b.layBottom.isVisible = false
-    }
-
-    private fun enableSelectionMode() {
-        isSelectionModeActivated = true
-        b.txtSearch.isEnabled = false
-
-        if (b.navMenu.menu.findItem(R.id.menuAccounts).isChecked) {
-            accountAdapter.setShowCheckboxes(true)
-        } else if (b.navMenu.menu.findItem(R.id.menuBankCards).isChecked) {
-            bankCardAdapter.setShowCheckboxes(true)
-        } else if (b.navMenu.menu.findItem(R.id.menuContacts).isChecked) {
-            contactAdapter.setShowCheckboxes(true)
-        } else if (b.navMenu.menu.findItem(R.id.menuNotes).isChecked) {
-            noteAdapter.setShowCheckboxes(true)
-        }
-
-        b.btnAdd.isVisible = false
-        b.layBottom.isVisible = true
-    }
-
-    private fun addNewSelectedItem(
-        checkBox: MaterialCheckBox, item: Any
-    ) {/* we don't want duplicate items in the list, so first check the list */
-        selectedItems.add(item)
-        selectedViews.add(checkBox)
-    }
-
-    private fun removeSelectedItem(
-        checkBox: MaterialCheckBox, item: Any
-    ): Boolean {/* Removes the selected item, if item exist in the list return true else returns false */
-        var result: Boolean
-
-        if (selectedItems.contains(item)) {
-            selectedItems.remove(item)
-            selectedViews.remove(checkBox)
-
-            result = true
-        } else {
-            result = false
-        }
-
-        return result
-    }
-
-    private fun convertSelectedItemsToText(): String {
-        val sb = StringBuilder()
-        val firstItem = selectedItems.first()
-
-        /* create text to share text */
-        when (firstItem) {
-            is Account -> {
-                for (account in selectedItems) {
-                    sb.append(account).append(System.lineSeparator()).append(System.lineSeparator())
-                }
-            }
-
-            is BankCard -> {
-                for (bankCard in selectedItems) {
-                    sb.append(bankCard).append(System.lineSeparator())
-                        .append(System.lineSeparator())
-                }
-            }
-
-            is Contact -> {
-                for (contact in selectedItems) {
-                    sb.append(contact).append(System.lineSeparator()).append(System.lineSeparator())
-                }
-            }
-
-            is Note -> {
-                for (note in selectedItems) {
-                    sb.append(note).append(System.lineSeparator()).append(System.lineSeparator())
-                }
-            }
-        }
-
-        return sb.toString().trim()
-    }
-
-    private fun shareSelectedItems() {
-        if (selectedItems.isNotEmpty()) {
-            shareText(this, "Share information", convertSelectedItemsToText())
-            disableSelectionMode()
-        }
-    }
-
-    private fun copySelectedItems() {
-        if (selectedItems.isNotEmpty()) {
-            copyTextToClipboard(this, "Copy details", convertSelectedItemsToText())
-            disableSelectionMode()
-        }
-    }
-
-    private fun deleteSelectedItems() {
-        if (selectedItems.isNotEmpty()) {
-            val firstItem = selectedItems.first()
-
-            lifecycleScope.launch {
-                try {
-                    if (Dialogs.ask(
-                            context = this@MainActivity,
-                            icon = R.drawable.ic_delete,
-                            title = "Delete selected items",
-                            message = "You have selected ${selectedItems.size} item(s) from the list.\nAre you sure you want to delete these items?",
-                            yesText = "Delete",
-                            noText = "Cancel"
-                        )
-                    ) {
-                        when (firstItem) {
-                            is Account -> {
-                                for (account in selectedItems) {
-                                    databaseViewModel.deleteAccount(account as Account)
-                                }
-                            }
-
-                            is BankCard -> {
-                                for (bankCard in selectedItems) {
-                                    databaseViewModel.deleteBankCard(bankCard as BankCard)
-                                }
-                            }
-
-                            is Contact -> {
-                                for (contact in selectedItems) {
-                                    databaseViewModel.deleteContact(contact as Contact)
-                                }
-                            }
-
-                            is Note -> {
-                                for (note in selectedItems) {
-                                    databaseViewModel.deleteNote(note as Note)
-                                }
-                            }
-                        }
-
-                        disableSelectionMode()
-                    }
-                } catch (ex: Exception) {
-                    Dialogs.showException(this@MainActivity, ex)
-                }
-            }
-        }
+    fun showBottomNavigation(isVisible: Boolean) {
+        b.layNavigation.isVisible = isVisible
     }
 }
