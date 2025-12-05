@@ -34,7 +34,7 @@ class RegisterProfileActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var apiViewModel: ApiViewModel
     private lateinit var databaseViewModel: DatabaseViewModel
 
-    var currentFragmentIndex = 0
+    private var currentFragmentIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
